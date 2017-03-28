@@ -4,7 +4,7 @@ require 'active_support/all'
 
 describe 'integration test' do
   let(:bridge) { Mumukit::Bridge::Runner.new('http://localhost:4567') }
-  let(:response) { bridge.run_tests!(test) }
+  let(:response) { bridge.run_tests!(test).except(:result) }
 
   before(:all) do
     @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
@@ -22,8 +22,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                expectation_results: [],
-                                result: '' }
+                                expectation_results: [] }
   end
 
   context 'when code is different' do
@@ -34,8 +33,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :failed,
                                 feedback: '',
-                                expectation_results: [],
-                                result: '' }
+                                expectation_results: [] }
   end
 
   context 'when code is blank' do
@@ -46,8 +44,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :failed,
                                 feedback: '',
-                                expectation_results: [],
-                                result: '' }
+                                expectation_results: [] }
   end
 
   context 'when code has extra spaces' do
@@ -58,8 +55,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                expectation_results: [],
-                                result: '' }
+                                expectation_results: [] }
   end
 
   context 'when code has extra new-lines' do
@@ -70,7 +66,6 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                expectation_results: [],
-                                result: '' }
+                                expectation_results: [] }
   end
 end
