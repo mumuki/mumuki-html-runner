@@ -4,3 +4,11 @@ env:
   - RACK_ENV=development
 rvm:
 - 2.0.0
+deploy:
+  provider: rubygems
+  api_key:
+    secure: cBhiy4QhNIrAWuTWyJWRFAl/oxv2D/CerTdsPtz2xhrQaklgBYM02mbIsc+KvVeWmZUwbbHUUx5gVhR/h4LozhedUq+6TiBNQ4H5rLf4ILu2ToeznFNmozwYBwgDmuGZ5qDTt6jgh97KvpAc+oxhxFR3dLABc9eUTX6HriKlRPqDzagAiqNK0XiobtH+BAOJYpkku0nROh3wXdFWEEWjXEXEyoQgh+YNv5NVz21YqRm1h3k47EWa//7p5Sxomc7vZjnWHuyQYhHSylRiO4T0/7EDA4FCwxSzAo4uM/T/vMxF9S1DE/efnMIR4Z9McYjZwjbHwTtJOK5lGQwrgHFifrt8X7jPHlxa4xZoZEP21nUQwzP/hqauUfQae5Ps+jTbC+tzeYFDt/rPr688YnfU9u7SYp9i6O+iLBzxwuOalxD39CU1DFayeSQCPp4KD/woerCj23/ZSkySF23oiajQe3N2tz2yd2pHsJH31vX3C3fLaXcHdahaXntLjJGjUcd+8AxP4/4rHpOeZxhNwF9kW6L2t54zy+at6ghoHinGaDLWirgAhtqHtv0ymTl8Cj2ehU2M9uolANukITCQZOCf6mgLy4Of0VwOM0DWt+MGZ0Z0QBZryvFiYLj4953uNze7ZWR0ZqrcS5sr2iYsxerjWWYeDjGqOcy4fTOkqRuSwho=
+  gem: mumukit-html-runner
+  on:
+    tags: true
+    repo: mumuki/mumukit-html-runner
