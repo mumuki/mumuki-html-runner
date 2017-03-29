@@ -12,7 +12,6 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def run!(request)
-    puts request
     expected = request[:test]
     actual = request[:content]
 
