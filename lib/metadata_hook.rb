@@ -1,4 +1,4 @@
-class TextMetadataHook < Mumukit::Hook
+class HtmlMetadataHook < Mumukit::Hook
   def metadata
     {language: {
       name: 'html',
