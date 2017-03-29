@@ -2,7 +2,7 @@ require 'mumukit/hook'
 
 class String
   def visible_chars
-    gsub(/\s+/, '')
+    gsub(/\s+/, '').downcase
   end
 end
 

@@ -25,6 +25,17 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when code is equal to expected but with different case' do
+    let(:test) { {content: '<HTML></HTML>',
+                  test: '<html></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
   context 'when code has doble quotes equal to expected' do
     let(:test) { {content: '<meta charset="UTF-8">',
                   test: '<meta charset="UTF-8">'} }
