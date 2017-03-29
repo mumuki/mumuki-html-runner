@@ -4,7 +4,7 @@ require 'active_support/all'
 
 describe 'integration test' do
   let(:bridge) { Mumukit::Bridge::Runner.new('http://localhost:4567') }
-  let(:response) { bridge.run_tests!(test).except(:result) }
+  let(:response) { bridge.run_tests!(test) }
 
   before(:all) do
     @pid = Process.spawn 'rackup -p 4567', err: '/dev/null'
@@ -18,22 +18,35 @@ describe 'integration test' do
     let(:test) { {content: '<html></html>',
                   test: '<html></html>'} }
 
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has doble quotes equal to expected' do
+    let(:test) { {content: '<meta charset="UTF-8">',
+                  test: '<meta charset="UTF-8">'} }
+
     it { expect(response).to eq response_type: :unstructured,
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
+                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"<meta charset=\\\"UTF-8\\\">\"></iframe>",
                                 expectation_results: [] }
   end
+
 
   context 'when code is different' do
     let(:test) { {content: '<html></html>',
                   test: '<html>'} }
 
-    it { expect(response).to eq response_type: :unstructured,
-                                test_results: [],
-                                status: :failed,
-                                feedback: '',
-                                expectation_results: [] }
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :failed,
+                                                feedback: '',
+                                                expectation_results: [] }
   end
 
   context 'when code is blank' do
@@ -44,6 +57,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :failed,
                                 feedback: '',
+                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"\"></iframe>",
                                 expectation_results: [] }
   end
 
@@ -51,11 +65,11 @@ describe 'integration test' do
     let(:test) { {content: '<html></html>',
                   test: '<html> </html>'} }
 
-    it { expect(response).to eq response_type: :unstructured,
-                                test_results: [],
-                                status: :passed,
-                                feedback: '',
-                                expectation_results: [] }
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
   end
 
   context 'when code has extra new-lines' do
@@ -66,6 +80,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
+                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"<html></html>\"></iframe>",
                                 expectation_results: [] }
   end
 end
