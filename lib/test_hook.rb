@@ -23,7 +23,7 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def render_html(actual)
-    "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"#{actual.gsub('"', '\"')}\"></iframe>"
+    "<br><div class=\"mu-browser\"><iframe srcdoc=\"#{actual.gsub('"', '\"')}\"></iframe></div>"
   end
 
 end

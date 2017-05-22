@@ -44,7 +44,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"<meta charset=\\\"UTF-8\\\">\"></iframe>",
+                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<meta charset=\\\"UTF-8\\\">\"></iframe></div>",
                                 expectation_results: [] }
   end
 
@@ -68,7 +68,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :failed,
                                 feedback: '',
-                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"\"></iframe>",
+                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"\"></iframe></div>",
                                 expectation_results: [] }
   end
 
@@ -91,7 +91,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                result: "<br><iframe style=\"border-color: #e6e6e6; border-style: solid; border-width: thin; width: 100%;\" srcdoc=\"<html></html>\"></iframe>",
+                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<html></html>\"></iframe></div>",
                                 expectation_results: [] }
   end
 end
