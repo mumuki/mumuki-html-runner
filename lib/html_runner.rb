@@ -1,5 +1,6 @@
 require 'mumukit'
 require 'yaml'
+require 'nokogiri'
 require 'hexp'
 
 I18n.load_translations_path File.join(__dir__, 'locales', '*.yml')
@@ -11,3 +12,4 @@ end
 
 require_relative './metadata_hook'
 require_relative './test_hook'
+require_relative './expectations_hook'
