@@ -44,7 +44,7 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<meta charset=\\\"UTF-8\\\">\"></iframe></div>",
+                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<meta charset=&quot;UTF-8&quot;>\"></iframe></div>",
                                 expectation_results: [] }
   end
 

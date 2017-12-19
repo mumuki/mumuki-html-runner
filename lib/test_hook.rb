@@ -23,7 +23,7 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def render_html(actual)
-    "<br><div class=\"mu-browser\"><iframe srcdoc=\"#{actual.gsub('"', '\"')}\"></iframe></div>"
+    "<br><div class=\"mu-browser\"><iframe srcdoc=\"#{actual.gsub('"', '&quot;')}\"></iframe></div>"
   end
 
 end
