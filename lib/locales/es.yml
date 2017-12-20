@@ -1,7 +1,9 @@
 es:
-  equality:
-    failure: '**%{actual}** no es el valor correcto.'
+  actual: Obtenido
+  expected: Esperado
   contain:
     failure: '**%{actual}** no contiene el valor correcto.'
+  equality:
+    failure: '**%{actual}** no es el valor correcto.'
   expression:
       failure: '**%{actual}** no coincide con la expresión correcta.'

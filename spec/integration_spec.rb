@@ -45,13 +45,6 @@ describe 'integration test' do
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<br>
-<strong>Obtenido</strong>
-<div class="mu-browser">
-  <iframe srcdoc="<meta charset=&quot;UTF-8&quot;>"></iframe>
-</div>
-<br>
-<strong>Esperado</strong>
 <div class="mu-browser">
   <iframe srcdoc="<meta charset=&quot;UTF-8&quot;>"></iframe>
 </div>
@@ -81,15 +74,17 @@ html
                                 feedback: '',
                                 result: <<html,
 <br>
-<strong>Obtenido</strong>
+<strong>Actual</strong>
 <div class="mu-browser">
   <iframe srcdoc=""></iframe>
 </div>
+
 <br>
-<strong>Esperado</strong>
+<strong>Expected</strong>
 <div class="mu-browser">
   <iframe srcdoc="<html></html>"></iframe>
 </div>
+
 html
                                 expectation_results: [] }
   end
@@ -114,16 +109,8 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<br>
-<strong>Obtenido</strong>
 <div class="mu-browser">
   <iframe srcdoc="<html></html>"></iframe>
-</div>
-<br>
-<strong>Esperado</strong>
-<div class="mu-browser">
-  <iframe srcdoc="<html>
-</html>"></iframe>
 </div>
 html
                                 expectation_results: [] }
