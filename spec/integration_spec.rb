@@ -44,7 +44,18 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<meta charset=&quot;UTF-8&quot;>\"></iframe></div>",
+                                result: <<html,
+<br>
+<strong>Obtenido</strong>
+<div class="mu-browser">
+  <iframe srcdoc="<meta charset=&quot;UTF-8&quot;>"></iframe>
+</div>
+<br>
+<strong>Esperado</strong>
+<div class="mu-browser">
+  <iframe srcdoc="<meta charset=&quot;UTF-8&quot;>"></iframe>
+</div>
+html
                                 expectation_results: [] }
   end
 
@@ -68,7 +79,18 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :failed,
                                 feedback: '',
-                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"\"></iframe></div>",
+                                result: <<html,
+<br>
+<strong>Obtenido</strong>
+<div class="mu-browser">
+  <iframe srcdoc=""></iframe>
+</div>
+<br>
+<strong>Esperado</strong>
+<div class="mu-browser">
+  <iframe srcdoc="<html></html>"></iframe>
+</div>
+html
                                 expectation_results: [] }
   end
 
@@ -91,7 +113,19 @@ describe 'integration test' do
                                 test_results: [],
                                 status: :passed,
                                 feedback: '',
-                                result: "<br><div class=\"mu-browser\"><iframe srcdoc=\"<html></html>\"></iframe></div>",
+                                result: <<html,
+<br>
+<strong>Obtenido</strong>
+<div class="mu-browser">
+  <iframe srcdoc="<html></html>"></iframe>
+</div>
+<br>
+<strong>Esperado</strong>
+<div class="mu-browser">
+  <iframe srcdoc="<html>
+</html>"></iframe>
+</div>
+html
                                 expectation_results: [] }
   end
 end
