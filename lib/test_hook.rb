@@ -16,14 +16,24 @@ class HtmlTestHook < Mumukit::Hook
     actual = request[:content]
 
     if expected.visible_chars == actual.visible_chars
-      [render_html(actual), :passed]
+      [render_html(actual, expected), :passed]
     else
-      [render_html(actual), :failed]
+      [render_html(actual, expected), :failed]
     end
   end
 
-  def render_html(actual)
-    "<br><div class=\"mu-browser\"><iframe srcdoc=\"#{actual.gsub('"', '&quot;')}\"></iframe></div>"
+  def render_html(actual, expected)
+    "#{build_iframe 'Obtenido', actual}#{build_iframe 'Esperado', expected}"
+  end
+
+  def build_iframe(name, content)
+    <<html
+<br>
+<strong>#{name}</strong>
+<div class="mu-browser">
+  <iframe srcdoc="#{content.gsub('"', '&quot;')}"></iframe>
+</div>
+html
   end
 
 end
