@@ -52,10 +52,36 @@ html
                                 expectation_results: [] }
   end
 
+  context 'when code has different quotemarks' do
+    let(:test) { {content: '<meta charset=\'UTF-8\'>',
+                  test: '<meta charset="UTF-8">'} }
 
-  context 'when code is different' do
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser">
+  <iframe srcdoc="<meta charset='UTF-8'>"></iframe>
+</div>
+html
+                                expectation_results: [] }
+  end
+
+  context 'when a tag is not closed but code is semantically equal' do
+    let(:test) { {content: '<p> some text',
+                  test: '<p> some text</p>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code is semantically different' do
     let(:test) { {content: '<html></html>',
-                  test: '<html>'} }
+                  test: '<html><div></div></html>'} }
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
@@ -68,6 +94,72 @@ html
     let(:test) { {content: '',
                   test: '<html></html>'} }
 
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :errored,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code is syntactically wrong' do
+    let(:test) { {content: 'some text',
+                  test: '<html></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :errored,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has extra spaces within tags' do
+    let(:test) { {content: '<html      ></html>',
+                  test: '<html></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has an extra space between tags' do
+    let(:test) { {content: '<html> </html>',
+                  test: '<html></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :failed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has repeated spaces' do
+    let(:test) { {content: '<html>  </html>',
+                  test: '<html> </html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has attributes in different order' do
+    let(:test) { {content: '<a href="http://www.mumuki.io" class="btn">',
+                  test: '<a class="btn" href="http://www.mumuki.io"'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when code has extra new-lines' do
+    let(:test) { {content: "<html>\n</html>",
+                  test: '<html></html>'} }
+
     it { expect(response).to eq response_type: :unstructured,
                                 test_results: [],
                                 status: :failed,
@@ -76,7 +168,7 @@ html
 <br>
 <strong>Actual</strong>
 <div class="mu-browser">
-  <iframe srcdoc=""></iframe>
+  <iframe srcdoc="<html>\n</html>"></iframe>
 </div>
 
 <br>
@@ -89,19 +181,8 @@ html
                                 expectation_results: [] }
   end
 
-  context 'when code has extra spaces' do
-    let(:test) { {content: '<html></html>',
-                  test: '<html> </html>'} }
-
-    it { expect(response.except(:result)).to eq response_type: :unstructured,
-                                                test_results: [],
-                                                status: :passed,
-                                                feedback: '',
-                                                expectation_results: [] }
-  end
-
-  context 'when code has extra new-lines' do
-    let(:test) { {content: '<html></html>',
+  context 'when code has repeated new-lines' do
+    let(:test) { {content: "<html>\n\n</html>",
                   test: "<html>\n</html>"} }
 
     it { expect(response).to eq response_type: :unstructured,
@@ -110,7 +191,7 @@ html
                                 feedback: '',
                                 result: <<html,
 <div class="mu-browser">
-  <iframe srcdoc="<html></html>"></iframe>
+  <iframe srcdoc="<html>\n\n</html>"></iframe>
 </div>
 html
                                 expectation_results: [] }
