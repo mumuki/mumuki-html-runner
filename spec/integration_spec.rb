@@ -25,6 +25,23 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when using expectations only' do
+    let(:test) { {
+      content: '<html><body><h2>Hello</h2></body></html>',
+      test: '',
+      expectations: [
+        {binding: '*', inspection: 'DeclaresTag:h1'},
+        {binding: 'body', inspection: 'DeclaresTag:h2'}] } }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed_with_warnings,
+                                                feedback: '',
+                                                expectation_results: [
+                                                  {binding: '*', inspection: 'DeclaresTag:h1', result: :failed},
+                                                  {binding: 'body', inspection: 'DeclaresTag:h2', result: :passed}] }
+  end
+
   context 'when code is equal to expected but with different case' do
     let(:test) { {content: '<HTML></HTML>',
                   test: '<html></html>'} }
