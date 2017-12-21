@@ -18,10 +18,13 @@ class HtmlExpectationsHook < Mumukit::Hook
         else raise "Unsupported inspection #{expectation.inspection.type}"
       end
 
-      result = document.xpath(xpath).present?
-      result = !result if expectation.inspection.negated?
-
-      {expectation: expectation.to_h, result: result}
+      {expectation: expectation.to_h, result: negate(expectation, document.xpath(xpath))}
     end
+  end
+
+  private
+
+  def negate(expectation, matches)
+    expectation.inspection.negated? ? matches.blank? : matches.present?
   end
 end
