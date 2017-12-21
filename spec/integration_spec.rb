@@ -96,7 +96,7 @@ html
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :errored,
+                                                status: :failed,
                                                 feedback: '',
                                                 expectation_results: [] }
   end
@@ -107,7 +107,7 @@ html
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :errored,
+                                                status: :failed,
                                                 feedback: '',
                                                 expectation_results: [] }
   end

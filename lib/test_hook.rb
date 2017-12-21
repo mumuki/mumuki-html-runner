@@ -15,13 +15,17 @@ class HtmlTestHook < Mumukit::Hook
     expected = request[:test]
     actual = request[:content]
 
-    if hexp(expected) == hexp(actual)
+    if contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
       [render_fail_html(actual, expected), :failed]
     end
-  rescue => e
-    [e, :errored]
+  end
+
+  def contents_match?(expected, actual)
+    hexp(expected) == hexp(actual)
+  rescue
+    expected == actual
   end
 
   def hexp(content)
