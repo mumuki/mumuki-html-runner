@@ -5,8 +5,8 @@ class HtmlExpectationsHook < Mumukit::Hook
 
   def run!(request)
     document = Nokogiri::HTML(request.content)
-    request.expectations.map do |expectation|
-      expectation = Mumukit::Inspection::Expectation.parse(expectation)
+    request.expectations.map do |raw|
+      expectation = Mumukit::Inspection::Expectation.parse(raw)
 
       base_xpath = "//#{expectation.binding == '*' ? '' : expectation.binding}"
 
@@ -18,7 +18,7 @@ class HtmlExpectationsHook < Mumukit::Hook
         else raise "Unsupported inspection #{expectation.inspection.type}"
       end
 
-      {expectation: expectation.to_h, result: negate(expectation, document.xpath(xpath))}
+      {expectation: raw, result: negate(expectation, document.xpath(xpath))}
     end
   end
 
