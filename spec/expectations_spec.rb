@@ -27,10 +27,12 @@ describe HtmlExpectationsHook do
     let(:code) { '<html><body><div><h1>Hello</h1></div><h2>World</h2></body></html>' }
     let(:expectations) { [
       {binding: 'div', inspection: 'DeclaresTag:h1'},
+      {binding: 'body', inspection: 'DeclaresTag:h1'},
       {binding: 'div', inspection: 'DeclaresTag:h2'} ] }
 
     it { expect(result).to eq [
         { expectation: {binding: 'div', inspection: 'DeclaresTag:h1'}, result: true},
+        { expectation: {binding: 'body', inspection: 'DeclaresTag:h1'}, result: true},
         { expectation: {binding: 'div', inspection: 'DeclaresTag:h2'}, result: false} ] }
   end
 
