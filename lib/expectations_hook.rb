@@ -6,7 +6,7 @@ class HtmlExpectationsHook < Mumukit::Hook
   def run!(request)
     document = Nokogiri::HTML(request.content)
     request.expectations.map do |raw|
-      expectation = Mumukit::Inspection::Expectation.parse(raw)
+      expectation = Mumukit::Inspection::Expectation.parse(raw.with_indifferent_access)
       matches = document.xpath "#{compile_scope expectation}//#{compile_target expectation.inspection}"
       {expectation: raw, result: negate(expectation, matches)}
     end
