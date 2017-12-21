@@ -15,11 +15,22 @@ class HtmlTestHook < Mumukit::Hook
     expected = request[:test]
     actual = request[:content]
 
-    if expected.visible_chars == actual.visible_chars
+    if contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
       [render_fail_html(actual, expected), :failed]
     end
+  end
+
+  def contents_match?(expected, actual)
+    hexp(expected) == hexp(actual)
+  rescue
+    expected == actual
+  end
+
+  def hexp(content)
+    squeezed_content = [' ', "\n", "\t"].reduce(content, :squeeze)
+    Hexp::Node.new(:html, Hexp.parse(squeezed_content))
   end
 
   def render_html(actual)
