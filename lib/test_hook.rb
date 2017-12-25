@@ -29,8 +29,8 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def hexp(content)
-    squeezed_content = [' ', "\n", "\t"].reduce(content, :squeeze)
-    Hexp::Node.new(:html, Hexp.parse(squeezed_content))
+    squeezed_content = ["\r", "\n", "\t"].reduce(content) { |c, it| c.gsub(it, ' ') }.squeeze(' ')
+    Hexp.parse("<html>#{squeezed_content}</html>")
   end
 
   def render_html(actual)

@@ -42,6 +42,33 @@ describe 'integration test' do
                                                   {binding: 'body', inspection: 'DeclaresTag:h2', result: :passed}] }
   end
 
+  context 'when texts differ on whitespaces' do
+    let(:test) { {
+      content: "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n  <title>Mi Currículum</title>\r\n  <meta charset=\"utf-8\">\r\n</head>\r\n<body>\r\n  <header>\r\n    <h1>Mi Currículum</h1>\r\n  </header>\r\n  <main>\r\n    <section>\r\n      <h3>Habilidades</h3>\r\n      <ul>\r\n        <li>Programación con objetos</li>\r\n        <li>Ruby</li>\r\n        <li>HTML</li>\r\n      </ul>\r\n    </section>\r\n  </main>\r\n</body>\r\n</html>",
+      test:    "<!DOCTYPE html>\n<html>\n<head>\n  <title>Mi Currículum</title>\n  <meta charset=\"utf-8\">\n</head>\n<body>\n  <header>\n    <h1>Mi Currículum</h1>\n  </header>\n  <main>\n    <section>\n      <h3>Habilidades</h3>\n      <ul>\n        <li>Programación con objetos</li>\n        <li>Ruby</li>\n        <li>HTML</li>\n      </ul>\n    </section>\n  </main>\n</body>\n</html>",
+      expectations: [] } }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+  context 'when html are not well formed' do
+    let(:test) { {
+      content: "<head>\r\n  <title>Roberto Arlt: Los siete Locos</title>\r\n</head>\r\n<body>\r\n  <h1>Los Siete Locos</h1>\r\n  <h2>Capítulo 1</h2>\r\n  <h3>La sorpresa</h3>\r\n  Al abrir la puerta de emergencia...\r\n  ",
+      test: "<head>\n  <title>Roberto Arlt: Los siete Locos</title>\n</head>\n<body>\n  <h1>Los Siete Locos</h1>\n  <h2>Capítulo 1</h2>\n  <h3>La sorpresa</h3>\n  Al abrir la puerta de emergencia...\n  \n  <h3>Estados de conciencia</h3>\n  Sabía que era un ladrón...\n</body>" ,
+      expectations: [] } }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :failed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+
   context 'when code is equal to expected but with different case' do
     let(:test) { {content: '<HTML></HTML>',
                   test: '<html></html>'} }
@@ -113,7 +140,7 @@ html
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :failed,
+                                                status: :passed,
                                                 feedback: '',
                                                 expectation_results: [] }
   end
