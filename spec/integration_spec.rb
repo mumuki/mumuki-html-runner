@@ -25,6 +25,17 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when code is equal to expected, but has trailing whitespaces' do
+    let(:test) { {content: " <html></html> \n ",
+                  test: '<html></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
   context 'when using expectations only' do
     let(:test) { {
       content: '<html><body><h2>Hello</h2></body></html>',

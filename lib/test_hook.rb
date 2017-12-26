@@ -29,7 +29,9 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def hexp(content)
-    squeezed_content = ["\r", "\n", "\t"].reduce(content) { |c, it| c.gsub(it, ' ') }.squeeze(' ')
+    squeezed_content = ["\r", "\n", "\t"]
+                          .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+                          .squeeze(' ')
     Hexp.parse("<html>#{squeezed_content}</html>")
   end
 
