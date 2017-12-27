@@ -55,14 +55,20 @@ class HtmlTestHook < Mumukit::Hook
 html
   end
 
-  def page_title(content)
-    title = hexp(content).to_dom&.xpath('//title')&.first&.text
+  def page_title(dom)
+    title = dom.xpath('//title').first&.text
     title.present? ? " data-title=\"#{title}\"" : ''
   end
 
+  def page_favicon(dom)
+    tag = dom.xpath('//link').first.to_h
+    tag['rel'] == 'icon' && tag['href'].present? ? " data-favicon=\"#{tag['href']}\"" : ''
+  end
+
   def build_iframe(content)
+    dom = hexp(content).to_dom
     <<html
-<div class="mu-browser"#{page_title content} data-srcdoc="#{content.gsub('"', '&quot;')}">
+<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.gsub('"', '&quot;')}">
 </div>
 html
   end

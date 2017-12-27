@@ -275,4 +275,32 @@ html
 html
                                 expectation_results: [] }
   end
+  context 'when html has favicon' do
+    let(:test) { {content: '<html><head><link rel="icon" href="favicon.ico"><head></html>',
+                  test: '<html><head><link rel="icon" href="favicon.ico"><head></html>'} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser" data-favicon="favicon.ico" data-srcdoc="<html><head><link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;><head></html>">
+</div>
+html
+                                expectation_results: [] }
+  end
+  context 'when html has favicon and title' do
+    let(:test) { {content: '<html><head><title>my title</title><link rel="icon" href="favicon.ico"><head></html>',
+                  test: '<html><head><title>my title</title><link rel="icon" href="favicon.ico"><head></html>'} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser" data-title="my title" data-favicon="favicon.ico" data-srcdoc="<html><head><title>my title</title><link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;><head></html>">
+</div>
+html
+                                expectation_results: [] }
+  end
 end
