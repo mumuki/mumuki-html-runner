@@ -23,15 +23,19 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def contents_match?(expected, actual)
-    hexp(expected) == hexp(actual)
+    hexp_without_blanks(expected) == hexp_without_blanks(actual)
   rescue
     expected == actual
   end
 
-  def hexp(content)
+  def hexp_without_blanks(content)
     squeezed_content = ["\r", "\n", "\t"]
                          .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
                          .squeeze(' ')
+    hexp(squeezed_content)
+  end
+
+  def hexp(squeezed_content)
     Hexp.parse("<html>#{squeezed_content}</html>")
   end
 
@@ -51,9 +55,14 @@ class HtmlTestHook < Mumukit::Hook
 html
   end
 
+  def page_title(content)
+    title = hexp(content).to_dom.xpath('//title').text
+    title.present? ? " data-title=\"#{title}\"" : ''
+  end
+
   def build_iframe(content)
     <<html
-<div class="mu-browser" data-srcdoc="#{content.gsub('"', '&quot;')}">
+<div class="mu-browser"#{page_title content} data-srcdoc="#{content.gsub('"', '&quot;')}">
 </div>
 html
   end
