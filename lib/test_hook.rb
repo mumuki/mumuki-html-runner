@@ -56,7 +56,7 @@ html
   end
 
   def page_title(content)
-    title = hexp(content).to_dom.xpath('//title').text
+    title = hexp(content).to_dom&.xpath('//title')&.first&.text
     title.present? ? " data-title=\"#{title}\"" : ''
   end
 

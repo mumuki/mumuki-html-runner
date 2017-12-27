@@ -261,4 +261,18 @@ html
 html
                                 expectation_results: [] }
   end
+  context 'when html has multiples title tag' do
+    let(:test) { {content: '<html><head><title>my title</title><title>my title 2</title><head></html>',
+                  test: '<html><head><title>my title</title><title>my title 2</title><head></html>'} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser" data-title="my title" data-srcdoc="<html><head><title>my title</title><title>my title 2</title><head></html>">
+</div>
+html
+                                expectation_results: [] }
+  end
 end
