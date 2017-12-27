@@ -42,7 +42,7 @@ describe 'integration test' do
       test: '',
       expectations: [
         {binding: '*', inspection: 'DeclaresTag:h1'},
-        {binding: 'body', inspection: 'DeclaresTag:h2'}] } }
+        {binding: 'body', inspection: 'DeclaresTag:h2'}]} }
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
@@ -56,8 +56,8 @@ describe 'integration test' do
   context 'when texts differ on whitespaces' do
     let(:test) { {
       content: "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n  <title>Mi Currículum</title>\r\n  <meta charset=\"utf-8\">\r\n</head>\r\n<body>\r\n  <header>\r\n    <h1>Mi Currículum</h1>\r\n  </header>\r\n  <main>\r\n    <section>\r\n      <h3>Habilidades</h3>\r\n      <ul>\r\n        <li>Programación con objetos</li>\r\n        <li>Ruby</li>\r\n        <li>HTML</li>\r\n      </ul>\r\n    </section>\r\n  </main>\r\n</body>\r\n</html>",
-      test:    "<!DOCTYPE html>\n<html>\n<head>\n  <title>Mi Currículum</title>\n  <meta charset=\"utf-8\">\n</head>\n<body>\n  <header>\n    <h1>Mi Currículum</h1>\n  </header>\n  <main>\n    <section>\n      <h3>Habilidades</h3>\n      <ul>\n        <li>Programación con objetos</li>\n        <li>Ruby</li>\n        <li>HTML</li>\n      </ul>\n    </section>\n  </main>\n</body>\n</html>",
-      expectations: [] } }
+      test: "<!DOCTYPE html>\n<html>\n<head>\n  <title>Mi Currículum</title>\n  <meta charset=\"utf-8\">\n</head>\n<body>\n  <header>\n    <h1>Mi Currículum</h1>\n  </header>\n  <main>\n    <section>\n      <h3>Habilidades</h3>\n      <ul>\n        <li>Programación con objetos</li>\n        <li>Ruby</li>\n        <li>HTML</li>\n      </ul>\n    </section>\n  </main>\n</body>\n</html>",
+      expectations: []} }
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
@@ -69,8 +69,8 @@ describe 'integration test' do
   context 'when html are not well formed' do
     let(:test) { {
       content: "<head>\r\n  <title>Roberto Arlt: Los siete Locos</title>\r\n</head>\r\n<body>\r\n  <h1>Los Siete Locos</h1>\r\n  <h2>Capítulo 1</h2>\r\n  <h3>La sorpresa</h3>\r\n  Al abrir la puerta de emergencia...\r\n  ",
-      test: "<head>\n  <title>Roberto Arlt: Los siete Locos</title>\n</head>\n<body>\n  <h1>Los Siete Locos</h1>\n  <h2>Capítulo 1</h2>\n  <h3>La sorpresa</h3>\n  Al abrir la puerta de emergencia...\n  \n  <h3>Estados de conciencia</h3>\n  Sabía que era un ladrón...\n</body>" ,
-      expectations: [] } }
+      test: "<head>\n  <title>Roberto Arlt: Los siete Locos</title>\n</head>\n<body>\n  <h1>Los Siete Locos</h1>\n  <h2>Capítulo 1</h2>\n  <h3>La sorpresa</h3>\n  Al abrir la puerta de emergencia...\n  \n  <h3>Estados de conciencia</h3>\n  Sabía que era un ladrón...\n</body>",
+      expectations: []} }
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
@@ -100,8 +100,7 @@ describe 'integration test' do
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser">
-  <iframe srcdoc="<meta charset=&quot;UTF-8&quot;>"></iframe>
+<div class="mu-browser" data-srcdoc="<meta charset=&quot;UTF-8&quot;>">
 </div>
 html
                                 expectation_results: [] }
@@ -116,8 +115,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser">
-  <iframe srcdoc="<meta charset='UTF-8'>"></iframe>
+<div class="mu-browser" data-srcdoc="<meta charset='UTF-8'>">
 </div>
 html
                                 expectation_results: [] }
@@ -222,14 +220,12 @@ html
                                 result: <<html,
 <br>
 <strong>Actual</strong>
-<div class="mu-browser">
-  <iframe srcdoc="<html>\n</html>"></iframe>
+<div class="mu-browser" data-srcdoc="<html>\n</html>">
 </div>
 
 <br>
 <strong>Expected</strong>
-<div class="mu-browser">
-  <iframe srcdoc="<html></html>"></iframe>
+<div class="mu-browser" data-srcdoc="<html></html>">
 </div>
 
 html
@@ -245,8 +241,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser">
-  <iframe srcdoc="<html>\n\n</html>"></iframe>
+<div class="mu-browser" data-srcdoc="<html>\n\n</html>">
 </div>
 html
                                 expectation_results: [] }

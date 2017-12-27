@@ -30,8 +30,8 @@ class HtmlTestHook < Mumukit::Hook
 
   def hexp(content)
     squeezed_content = ["\r", "\n", "\t"]
-                          .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-                          .squeeze(' ')
+                         .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+                         .squeeze(' ')
     Hexp.parse("<html>#{squeezed_content}</html>")
   end
 
@@ -53,8 +53,7 @@ html
 
   def build_iframe(content)
     <<html
-<div class="mu-browser">
-  <iframe srcdoc="#{content.gsub('"', '&quot;')}"></iframe>
+<div class="mu-browser" data-srcdoc="#{content.gsub('"', '&quot;')}">
 </div>
 html
   end
