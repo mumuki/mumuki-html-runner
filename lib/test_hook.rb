@@ -1,11 +1,5 @@
 require 'mumukit/hook'
 
-class String
-  def visible_chars
-    gsub(/\s+/, '').downcase
-  end
-end
-
 class HtmlTestHook < Mumukit::Hook
   def compile(request)
     request
@@ -23,15 +17,18 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def contents_match?(expected, actual)
-    hexp(expected) == hexp(actual)
+    hexp_without_blanks(expected) == hexp_without_blanks(actual)
   rescue
     expected == actual
   end
 
-  def hexp(content)
-    squeezed_content = ["\r", "\n", "\t"]
-                          .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-                          .squeeze(' ')
+  def hexp_without_blanks(content)
+    hexp ["\r", "\n", "\t"]
+         .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+         .squeeze(' ')
+  end
+
+  def hexp(squeezed_content)
     Hexp.parse("<html>#{squeezed_content}</html>")
   end
 
@@ -51,10 +48,20 @@ class HtmlTestHook < Mumukit::Hook
 html
   end
 
+  def page_title(dom)
+    title = dom.xpath('//title').first&.text
+    title.present? ? " data-title=\"#{title}\"" : ''
+  end
+
+  def page_favicon(dom)
+    dom.xpath("//link[@rel='icon' and @href]").first
+       .try { |tag| " data-favicon=\"#{tag['href']}\"" }
+  end
+
   def build_iframe(content)
+    dom = hexp(content).to_dom
     <<html
-<div class="mu-browser">
-  <iframe srcdoc="#{content.gsub('"', '&quot;')}"></iframe>
+<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.gsub('"', '&quot;')}">
 </div>
 html
   end
