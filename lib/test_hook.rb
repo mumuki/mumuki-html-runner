@@ -1,11 +1,5 @@
 require 'mumukit/hook'
 
-class String
-  def visible_chars
-    gsub(/\s+/, '').downcase
-  end
-end
-
 class HtmlTestHook < Mumukit::Hook
   def compile(request)
     request
