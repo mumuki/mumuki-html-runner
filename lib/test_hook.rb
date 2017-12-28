@@ -54,8 +54,8 @@ html
   end
 
   def page_favicon(dom)
-    tag = dom.xpath('//link').first.to_h
-    tag['rel'] == 'icon' && tag['href'].present? ? " data-favicon=\"#{tag['href']}\"" : ''
+    dom.xpath("//link[@rel='icon' and @href]").first
+       .try { |tag| " data-favicon=\"#{tag['href']}\"" }
   end
 
   def build_iframe(content)
