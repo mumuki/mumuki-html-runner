@@ -4,6 +4,7 @@ class HtmlMetadataHook < Mumukit::Hook
       name: 'html',
       icon: {type: 'devicon', name: 'html'},
       extension: 'html',
+      ace_mode: 'haskell',
       graphic: true
     },
      test_framework: {
