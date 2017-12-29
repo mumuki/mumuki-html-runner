@@ -1,5 +1,11 @@
 require 'mumukit/hook'
 
+class String
+  def escape_html
+    ERB::Util.html_escape self
+  end
+end
+
 class HtmlTestHook < Mumukit::Hook
   def compile(request)
     request
@@ -24,8 +30,8 @@ class HtmlTestHook < Mumukit::Hook
 
   def hexp_without_blanks(content)
     hexp ["\r", "\n", "\t"]
-         .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-         .squeeze(' ')
+           .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+           .squeeze(' ')
   end
 
   def hexp(squeezed_content)
@@ -55,13 +61,13 @@ html
 
   def page_favicon(dom)
     dom.xpath("//link[@rel='icon' and @href]").first
-       .try { |tag| " data-favicon=\"#{tag['href']}\"" }
+      .try { |tag| " data-favicon=\"#{tag['href']}\"" }
   end
 
   def build_iframe(content)
     dom = hexp(content).to_dom
     <<html
-<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.gsub('"', '&quot;')}">
+<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.escape_html}">
 </div>
 html
   end
