@@ -100,7 +100,7 @@ describe 'integration test' do
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-srcdoc="<meta charset=&quot;UTF-8&quot;>">
+<div class="mu-browser" data-srcdoc="#{'<meta charset="UTF-8">'.escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -115,7 +115,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-srcdoc="<meta charset='UTF-8'>">
+<div class="mu-browser" data-srcdoc="#{"<meta charset='UTF-8'>".escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -220,12 +220,12 @@ html
                                 result: <<html,
 <br>
 <strong>Actual</strong>
-<div class="mu-browser" data-srcdoc="<html>\n</html>">
+<div class="mu-browser" data-srcdoc="#{"<html>\n</html>".escape_html}">
 </div>
 
 <br>
 <strong>Expected</strong>
-<div class="mu-browser" data-srcdoc="<html></html>">
+<div class="mu-browser" data-srcdoc="#{'<html></html>'.escape_html}">
 </div>
 
 html
@@ -241,7 +241,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-srcdoc="<html>\n\n</html>">
+<div class="mu-browser" data-srcdoc="#{"<html>\n\n</html>".escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -256,7 +256,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-title="my title" data-srcdoc="<html><head><title>my title</title><head></html>">
+<div class="mu-browser" data-title="my title" data-srcdoc="#{'<html><head><title>my title</title><head></html>'.escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -270,7 +270,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-title="my title" data-srcdoc="<html><head><title>my title</title><title>my title 2</title><head></html>">
+<div class="mu-browser" data-title="my title" data-srcdoc="#{'<html><head><title>my title</title><title>my title 2</title><head></html>'.escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -284,7 +284,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-favicon="favicon.ico" data-srcdoc="<html><head><link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;><head></html>">
+<div class="mu-browser" data-favicon="favicon.ico" data-srcdoc="#{'<html><head><link rel="icon" href="favicon.ico"><head></html>'.escape_html}">
 </div>
 html
                                 expectation_results: [] }
@@ -298,7 +298,7 @@ html
                                 status: :passed,
                                 feedback: '',
                                 result: <<html,
-<div class="mu-browser" data-title="my title" data-favicon="favicon.ico" data-srcdoc="<html><head><title>my title</title><link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;><head></html>">
+<div class="mu-browser" data-title="my title" data-favicon="favicon.ico" data-srcdoc="#{'<html><head><title>my title</title><link rel="icon" href="favicon.ico"><head></html>'.escape_html}">
 </div>
 html
                                 expectation_results: [] }
