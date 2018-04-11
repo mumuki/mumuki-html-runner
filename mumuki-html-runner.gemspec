@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mumukit', '~> 2.18'
   spec.add_dependency 'hexp', '~> 0.4'
 
-  spec.add_development_dependency 'mumukit-content-type', '~> 0.4.0'
   spec.add_development_dependency 'bundler', '~> 1.7'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.4'
