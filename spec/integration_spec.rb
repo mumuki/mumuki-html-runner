@@ -36,6 +36,18 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+    context 'when extra code is equal to expected' do
+    let(:test) { {content: '<body></body>', extra: '<html>/*...content...*/</html>',
+                  test: '<html><body></body></html>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
+
   context 'when using expectations only' do
     let(:test) { {
       content: '<html><body><h2>Hello</h2></body></html>',
