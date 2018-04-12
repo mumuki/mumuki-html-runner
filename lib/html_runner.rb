@@ -2,6 +2,7 @@ require 'mumukit'
 require 'yaml'
 require 'nokogiri'
 require 'hexp'
+require 'css_parser'
 
 I18n.load_translations_path File.join(__dir__, 'locales', '*.yml')
 

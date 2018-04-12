@@ -68,4 +68,15 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'body', inspection: 'Not:DeclaresTag:h1'}, result: false},
         { expectation: {binding: 'body', inspection: 'Not:DeclaresTag:h2'}, result: true}] }
   end
+
+  describe 'body Not:DeclaresTag:' do
+    let(:code) { "p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: 'red'}" }
+    let(:expectations) { [
+        {binding: 'css:*', inspection: 'DeclaresTag:h2'},
+        {binding: 'css:h2', inspection: 'DeclaresAttribute:color'}] }
+
+    it { expect(result).to eq [
+        { expectation: {binding: 'css:*', inspection: 'DeclaresTag:h2'}, result: true},
+        { expectation: {binding: 'css:h2', inspection: 'DeclaresAttribute:color'}, result: true}] }
+  end
 end
