@@ -4,18 +4,20 @@ class HtmlExpectationsHook < Mumukit::Hook
   end
 
   def run!(request)
+    document = Nokogiri::HTML(request.content)
     request.expectations.map do |raw|
       expectation = Mumukit::Inspection::Expectation.parse(raw.with_indifferent_access)
       binding = expectation.binding.gsub(/(css:)|(html:)/, '')
       lang = expectation.binding.starts_with?('css:')? 'css' : 'html'
-      matches = send("run_#{lang}", request.content, expectation, binding)
+      matches = send("run_#{lang}", document, expectation, binding)
       {expectation: raw, result: negate(expectation, matches)}
     end
   end
 
   private
 
-  def run_css(content, expectation, binding)
+  def run_css(document, expectation, binding)
+    content = document.xpath('//style').text.presence || document.text
     inspection = expectation.inspection
     parser = CssParser::Parser.new
     parser.load_string! content
@@ -28,8 +30,7 @@ class HtmlExpectationsHook < Mumukit::Hook
     end
   end
 
-  def run_html(content, expectation, binding)
-    document = Nokogiri::HTML(content)
+  def run_html(document, expectation, binding)
     document.xpath "#{compile_scope binding}//#{compile_html_target expectation.inspection}"
   end
 
