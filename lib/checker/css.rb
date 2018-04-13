@@ -11,21 +11,29 @@ module Checker
       inspection = expectation.inspection
       parser = CssParser::Parser.new
       parser.load_string! content
-      raise 'Target is required' if inspection.target.blank?
-      case inspection.type
-        when 'DeclaresTag'       then inspect_tag(parser, inspection)
-        when 'DeclaresAttribute' then inspect_attribute(parser, inspection, binding)
-        else raise "Unsupported inspection #{inspection.type}"
+      case inspection.target.to_s.split(':').size
+        when 0 then inspect_selector(parser, inspection, binding)
+        when 1 then inspect_property(parser, inspection, binding)
+        when 2 then inspect_property_and_value(parser, inspection, binding)
+        else raise "Malformed target value."
       end
     end
 
-    def self.inspect_tag(parser, inspection)
-      parser.tree[inspection.target.to_s].present?
+    def self.inspect_selector(parser, inspection, binding)
+      parser.tree[binding.to_s].present?
     end
 
-    def self.inspect_attribute(parser, inspection, binding)
-      property, value = inspection.target.to_s.split(':')
+    def self.inspect_property(parser, inspection, binding)
+      property, value = parse_target(inspection.target)
+      parser.tree[binding.to_s][property].present?
+    end
+    def self.inspect_property_and_value(parser, inspection, binding)
+      property, value = parse_target(inspection.target)
       parser.tree[binding.to_s][property] == value
+    end
+
+    def self.parse_target(target)
+     target.to_s.split(':')
     end
   end
 end

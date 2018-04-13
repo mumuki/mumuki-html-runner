@@ -69,20 +69,24 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'body', inspection: 'Not:DeclaresTag:h2'}, result: true}] }
   end
 
-  describe 'body DeclaresTag:' do
+  describe 'body DeclaresStyle' do
     let(:code) { "p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: 'red'}" }
     let(:expectations) { [
-        {binding: 'css:*', inspection: 'DeclaresTag:h2'} ] }
+        {binding: 'css:h2', inspection: 'DeclaresStyle'} ] }
 
     it { expect(result).to eq [
-        { expectation: {binding: 'css:*', inspection: 'DeclaresTag:h2'}, result: true} ] }
+        { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle'}, result: true} ] }
   end
-  describe 'body DeclaresAttribute:' do
+  describe 'body DeclaresStyle:' do
     let(:code) { "<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: 'red'} </style> </head>" }
     let(:expectations) { [
-        {binding: 'css:h2', inspection: 'DeclaresAttribute:color:blue'}] }
+        {binding: 'css:h2', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:h2', inspection: 'DeclaresStyle:color:red'},
+        {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}] }
 
     it { expect(result).to eq [
-        { expectation: {binding: 'css:h2', inspection: 'DeclaresAttribute:color:blue'}, result: true}] }
+        { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color'}, result: true},
+        { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:red'}, result: false},
+        { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
 end
