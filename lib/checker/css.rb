@@ -4,6 +4,12 @@ class CssParser::Parser
   end
 end
 
+class String
+  def words
+    split(' ')
+  end
+end
+
 module Checker
   class CSS
     def self.run(document, expectation, binding)
@@ -30,7 +36,7 @@ module Checker
     end
     def self.inspect_property_and_value(parser, inspection, binding)
       property, value = parse_target(inspection.target)
-      parser.tree[binding.to_s][property] == value
+      parser.tree[binding.to_s][property].words.include? value
     end
 
     def self.parse_target(target)

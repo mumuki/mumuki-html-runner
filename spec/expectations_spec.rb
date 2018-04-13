@@ -80,16 +80,22 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle'}, result: true} ] }
   end
   describe 'body DeclaresStyle:' do
-    let(:code) { "<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: red} </style> </head>" }
+    let(:code) { "<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: red} div.withBorder { border: 12px solid black; } </style> </head>" }
     let(:expectations) { [
         {binding: 'css:h2', inspection: 'DeclaresStyle:color'},
         {binding: 'css:h2', inspection: 'DeclaresStyle:color:red'},
+        {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:2px'},
+        {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:black'},
+        {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:solid'},
         {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'},
         {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}] }
 
     it { expect(result).to eq [
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color'}, result: true},
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:red'}, result: false},
+        { expectation: {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:2px'}, result: false},
+        { expectation: {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:black'}, result: true},
+        { expectation: {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:solid'}, result: true},
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'}, result: true},
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
