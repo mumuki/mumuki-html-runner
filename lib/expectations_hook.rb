@@ -7,27 +7,14 @@ class HtmlExpectationsHook < Mumukit::Hook
     document = Nokogiri::HTML(request.content)
     request.expectations.map do |raw|
       expectation = Mumukit::Inspection::Expectation.parse(raw.with_indifferent_access)
-      matches = document.xpath "#{compile_scope expectation}//#{compile_target expectation.inspection}"
+      binding = expectation.binding.gsub(/(css:)|(html:)/, '')
+      lang = expectation.binding.starts_with?('css:')? 'CSS' : 'HTML'
+      matches = "Checker::#{lang}".constantize.run document, expectation, binding
       {expectation: raw, result: negate(expectation, matches)}
     end
   end
 
   private
-
-  def compile_target(inspection)
-    target = inspection.target
-    raise 'Target is required' if target.blank?
-
-    case inspection.type
-      when 'DeclaresTag'       then target.value
-      when 'DeclaresAttribute' then "@#{target.value}"
-      else raise "Unsupported inspection #{inspection.type}"
-    end
-  end
-
-  def compile_scope(expectation)
-    "//#{expectation.binding == '*' ? '' : expectation.binding}"
-  end
 
   def negate(expectation, matches)
     expectation.inspection.negated? ? matches.blank? : matches.present?
