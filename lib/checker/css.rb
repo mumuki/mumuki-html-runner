@@ -11,6 +11,7 @@ module Checker
       inspection = expectation.inspection
       parser = CssParser::Parser.new
       parser.load_string! content
+      raise "Unsopported inspection #{inspection.type}" unless ['DeclaresStyle', 'DeclaresStyle:'].include? inspection.type
       case inspection.target.to_s.split(':').size
         when 0 then inspect_selector(parser, inspection, binding)
         when 1 then inspect_property(parser, inspection, binding)
