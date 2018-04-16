@@ -315,4 +315,20 @@ html
 html
                                 expectation_results: [] }
   end
+  context 'when content is empty expectations run' do
+    let(:test) { {content: 'p {color: blue;}', extra: '<html><head><style>/*...content...*/</style><head></html>',
+                  expectations: [
+                    {binding: 'css:p', inspection: 'DeclaresStyle:color:blue'},
+                    {binding: 'css:p', inspection: 'DeclaresStyle:color'}],
+                  test: ''} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                result: '',
+                                feedback: '',
+                                expectation_results: [
+                                  {binding: 'css:p', inspection: 'DeclaresStyle:color:blue', result: :passed},
+                                  {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed}] }
+  end
 end

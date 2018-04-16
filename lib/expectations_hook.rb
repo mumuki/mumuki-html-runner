@@ -4,7 +4,7 @@ class HtmlExpectationsHook < Mumukit::Hook
   end
 
   def run!(request)
-    document = Nokogiri::HTML(request.content)
+    document = Nokogiri::HTML(compile_content(request))
     request.expectations.map do |raw|
       expectation = Mumukit::Inspection::Expectation.parse(raw.with_indifferent_access)
       binding = expectation.binding.gsub(/(css:)|(html:)/, '')
@@ -15,6 +15,10 @@ class HtmlExpectationsHook < Mumukit::Hook
   end
 
   private
+
+  def compile_content(request)
+    request.content.presence || request.extra
+  end
 
   def negate(expectation, matches)
     expectation.inspection.negated? ? matches.blank? : matches.present?
