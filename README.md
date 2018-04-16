@@ -7,19 +7,19 @@
 # mumuki-html-runner
 > Sinatra server for validating HTML exercises within [Mumuki](http://github.com/mumuki)
 
-#Prerequisites
+## Prerequisites
   Install rbenv:
 
 >You can install rbenv following the instructions of this [Link](http://uqbar-wiki.org/index.php?title=Gu%C3%ADa_de_Instalaci%C3%B3n_de_Ruby)
 
-#Setup
+## Setup
  Open  the Terminal Console, located in this project's
  directory, run the following commands:
 
   bundle install
 
 
-#RUN TESTS
+## RUN TESTS
 
 Note: When running tests you may recieve a Warning like this one:
 
