@@ -10,6 +10,7 @@ Mumukit.runner_name = 'html'
 Mumukit.configure do |config|
   config.content_type = 'html'
   config.process_expectations_on_empty_content = true
+  config.run_test_hook_on_empty_test = true
 end
 
 require_relative './metadata_hook'
