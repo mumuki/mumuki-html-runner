@@ -315,8 +315,9 @@ html
 html
                                 expectation_results: [] }
   end
+
   context 'when content is empty expectations run' do
-    let(:test) { {content: 'p {color: blue;}', extra: '<html><head><style>/*...content...*/</style><head></html>',
+    let(:test) { {content: 'p {color: blue;}', extra: '<html><head><style>/*...content...*/</style></head></html>',
                   expectations: [
                     {binding: 'css:p', inspection: 'DeclaresStyle:color:blue'},
                     {binding: 'css:p', inspection: 'DeclaresStyle:color'}],
@@ -325,10 +326,54 @@ html
     it { expect(response).to eq response_type: :unstructured,
                                 test_results: [],
                                 status: :passed,
-                                result: '',
+                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{'<html><head><style>p {color: blue;}</style></head></html>'.escape_html}">
+</div>
+html
                                 feedback: '',
                                 expectation_results: [
                                   {binding: 'css:p', inspection: 'DeclaresStyle:color:blue', result: :passed},
                                   {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed}] }
+  end
+
+  context 'when using expectations only' do
+    let(:test) { {
+      content: '<html><head><style>p {color: blue;}</style></head></html>',
+      test: '',
+      expectations: [
+        {binding: 'css:p', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:p', inspection: 'DeclaresStyle:color:blue'}]} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{'<html><head><style>p {color: blue;}</style></head></html>'.escape_html}">
+</div>
+html
+                                                expectation_results: [
+                                                  {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed},
+                                                  {binding: 'css:p', inspection: 'DeclaresStyle:color:blue', result: :passed}] }
+  end
+  context 'when using wrong expectations only' do
+    let(:test) { {
+      content: '<html><head><style>p {color: blue;}</style></head></html>',
+      test: '',
+      expectations: [
+        {binding: 'css:p', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:p', inspection: 'DeclaresStyle:color:red'}]} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed_with_warnings,
+                                                feedback: '',
+                                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{'<html><head><style>p {color: blue;}</style></head></html>'.escape_html}">
+</div>
+html
+                                                expectation_results: [
+                                                  {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed},
+                                                  {binding: 'css:p', inspection: 'DeclaresStyle:color:red', result: :failed}] }
   end
 end
