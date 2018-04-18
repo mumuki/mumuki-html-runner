@@ -13,7 +13,7 @@ class HtmlTestHook < Mumukit::Hook
 
   def run!(request)
     expected = request[:test]
-    actual = request[:extra] || request[:content]
+    actual = request[:extra].presence || request[:content]
     if expected.blank? || contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
