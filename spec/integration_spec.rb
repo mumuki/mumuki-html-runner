@@ -166,6 +166,21 @@ html
                                                 expectation_results: [] }
   end
 
+  context 'when extra is blank' do
+    let(:test) { {content: '<html></html>', extra: '',
+                  test: '<html></html>'} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{"<html></html>".escape_html}">
+</div>
+html
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
   context 'when code is syntactically wrong' do
     let(:test) { {content: 'some text',
                   test: '<html></html>'} }
