@@ -1,6 +1,6 @@
 class CssParser::Parser
-  def tree
-    to_h['all'].with_indifferent_access
+  def dig(*keys)
+    to_h['all'].dig(*keys.map(&:to_s)) rescue {}
   end
 end
 
@@ -17,7 +17,11 @@ module Checker
       inspection = expectation.inspection
       parser = CssParser::Parser.new
       parser.load_string! content
-      raise "Unsopported inspection #{inspection.type}" unless ['DeclaresStyle', 'DeclaresStyle:'].include? inspection.type
+      raise "Unsupported inspection #{inspection.type}" unless ['DeclaresStyle', 'DeclaresStyle:'].include? inspection.type
+      inspect parser, inspection, binding
+    end
+
+    def self.inspect(parser, inspection, binding)
       case inspection.target.to_s.split(':').size
         when 0 then inspect_selector(parser, inspection, binding)
         when 1 then inspect_property(parser, inspection, binding)
@@ -27,16 +31,17 @@ module Checker
     end
 
     def self.inspect_selector(parser, inspection, binding)
-      parser.tree[binding.to_s].present?
+      parser.dig(binding).present?
     end
 
     def self.inspect_property(parser, inspection, binding)
       property, value = parse_target(inspection.target)
-      parser.tree[binding.to_s][property].present?
+      parser.dig(binding, property).present?
     end
+
     def self.inspect_property_and_value(parser, inspection, binding)
       property, value = parse_target(inspection.target)
-      parser.tree[binding.to_s][property].words.include? value
+      parser.dig(binding, property)&.words&.include? value
     end
 
     def self.parse_target(target)

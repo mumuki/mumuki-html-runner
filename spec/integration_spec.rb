@@ -371,6 +371,30 @@ html
                                                   {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed},
                                                   {binding: 'css:p', inspection: 'DeclaresStyle:color:blue', result: :passed}] }
   end
+
+  context 'when css syntax is invalid and has css expectations' do
+    let(:test) { {
+      content: '.section {
+  display: flex
+flex-direction: column;
+}',
+      test: '',
+      extra: '<html lang=\"en\"></html>',
+      expectations: [
+        {binding: "css:.section", inspection: "DeclaresStyle:display:flex"},
+        {binding: "css:.section", inspection: "DeclaresStyle:flex-direction:column"}]} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed_with_warnings,
+                                feedback: '',
+                                 expectation_results: [
+                                    {binding: 'css:.section', inspection: 'DeclaresStyle:display:flex', result: :failed},
+                                    {binding: 'css:.section', inspection: 'DeclaresStyle:flex-direction:column', result: :failed}],
+                                result: "<div class=\"mu-browser\" data-srcdoc=\"&lt;html lang=\\&quot;en\\&quot;&gt;&lt;/html&gt;\">\n</div>\n" }
+  end
+
+
   context 'when using wrong expectations only' do
     let(:test) { {
       content: '<html><head><style>p {color: blue;}</style></head></html>',
