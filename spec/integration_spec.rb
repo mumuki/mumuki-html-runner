@@ -379,15 +379,19 @@ html
 flex-direction: column;
 }',
       test: '',
-      extra: '<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n    <title>CV Nombre Apellido</title>\n\n    <style>\n        body {\n            margin: 0;\n            padding: 0;\n        }\n        /*...content...*/ \n    </style>\n</head>\n\n<body>\n    <section class=\"section\">\n        <header class=\"header\">\n            <h1 class=\"cv_name\">Nombre Apellido</h1>\n        </header>\n        <nav>\n            <ul class=\"navbar\">\n                <li>\n                    <a class=\"links\" href=\"#perfil\" target=\"_self\">Perfil</a>\n                </li>\n                <li>\n                    <a class=\"links\" href=\"#formacion\" target=\"_self\">Formación</a>\n                </li>\n                <li>\n                    <a class=\"links\" href=\"#experiencia\" target=\"_self\">Experiencia</a>\n                </li>\n            </ul>\n        </nav>\n        <div class=\"container\">\n            <aside class=\"aside\">\n                <figure class=\"figure\">\n                    <img  src=\"https://central.classroom.mumuki.io/images/avatar.svg\" alt=\"Foto de perfil\" width=\"200px\" height=\"auto\">\n                </figure>\n            </aside>\n            <div class=\"curriculum\">\n                <article id=\"perfil\">\n                    <h2 class=\"cv_section\">Perfil</h2>\n                    <p class=\"cv_data\">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore\n                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\n                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum\n                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui\n                        officia deserunt mollit anim id est laborum.\"</p>\n\n                </article>\n                <article id=\"formacion\">\n                    <h2 class=\"cv_section\">Formación</h2>\n                    <p class=\"cv_data\">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore\n                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\n                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum\n                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui\n                        officia deserunt mollit anim id est laborum.\"</p>\n\n                </article>\n                <article id=\"experiencia\">\n                    <h2 class=\"cv_section\">Experiencia</h2>\n                    <p class=\"cv_data\">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore\n                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\n                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum\n                        dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui\n                        officia deserunt mollit anim id est laborum.\"</p>\n\n                </article>\n            </div>\n        </div>\n        <footer class=\"footer\">\n            <p class=\"contact\">Mail de contacto:\n                <a href=\"mailto:nombre_apellido@example.com\">nombre_apellido@example.com</a>.</p>\n        </footer>\n    </section>\n</body>\n\n</html>',
+      extra: '<html lang=\"en\"></html>',
       expectations: [
         {binding: "css:.section", inspection: "DeclaresStyle:display:flex"},
         {binding: "css:.section", inspection: "DeclaresStyle:flex-direction:column"}]} }
 
-    it do
-      expect(response[:result]).to eq :errored
-      expect(response[:status]).to eq :errored
-    end
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed_with_warnings,
+                                feedback: '',
+                                 expectation_results: [
+                                    {binding: 'css:.section', inspection: 'DeclaresStyle:display:flex', result: :failed},
+                                    {binding: 'css:.section', inspection: 'DeclaresStyle:flex-direction:column', result: :failed}],
+                                result: "<div class=\"mu-browser\" data-srcdoc=\"&lt;html lang=\\&quot;en\\&quot;&gt;&lt;/html&gt;\">\n</div>\n" }
   end
 
 
