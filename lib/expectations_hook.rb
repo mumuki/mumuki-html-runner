@@ -4,7 +4,7 @@ class HtmlExpectationsHook < Mumukit::Hook
   end
 
   def run!(request)
-    document = Nokogiri::HTML(compile_content(request))
+    document = Nokogiri::HTML(request.content)
     request.expectations.map do |raw|
       evaluate_expectation raw, document
     end
@@ -22,10 +22,6 @@ class HtmlExpectationsHook < Mumukit::Hook
   def checker_for(expectation)
     lang = expectation.binding.starts_with?('css:')? 'CSS' : 'HTML'
     "Checker::#{lang}".constantize
-  end
-
-  def compile_content(request)
-    request.content.presence || request.extra
   end
 
   def negate(expectation, matches)

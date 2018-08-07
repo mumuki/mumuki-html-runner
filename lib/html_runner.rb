@@ -3,6 +3,7 @@ require 'yaml'
 require 'nokogiri'
 require 'hexp'
 require 'css_parser'
+require 'mumukit/hook'
 
 I18n.load_translations_path File.join(__dir__, 'locales', '*.yml')
 
@@ -13,7 +14,9 @@ Mumukit.configure do |config|
   config.run_test_hook_on_empty_test = true
 end
 
+require_relative './extensions/string'
 require_relative './metadata_hook'
+require_relative './precompile_hook'
 require_relative './test_hook'
 require_relative './checker'
 require_relative './expectations_hook'

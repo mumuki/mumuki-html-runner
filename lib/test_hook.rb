@@ -1,19 +1,11 @@
-require 'mumukit/hook'
-
-class String
-  def escape_html
-    ERB::Util.html_escape self
-  end
-end
-
 class HtmlTestHook < Mumukit::Hook
   def compile(request)
     request
   end
 
   def run!(request)
-    expected = request[:test]
-    actual = request[:extra].presence || request[:content]
+    expected = request.test
+    actual = request.content
     if expected.blank? || contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
