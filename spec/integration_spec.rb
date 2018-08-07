@@ -48,9 +48,12 @@ describe 'integration test' do
   end
 
   context 'when using multiple files' do
-    let(:test) { {"index.html": '<html><head><script src="foo.js"></script> <link rel="stylesheet" href="bar.css" /></head><body>Baz</body></html>',
-                  "foo.js": 'alert("foo");',
-                  "bar.css": '.red { color: red; }',
+    let(:test) { {
+                  content: <<content,
+/*<index.html#*/<html><head><script src="foo.js"></script> <link rel="stylesheet" href="bar.css" /></head><body>Baz</body></html>/*#index.html>*/
+/*<foo.js#*/alert("foo");/*#foo.js>*/
+/*<bar.css#*/.red { color: red; }/*#bar.css>*/
+content
                   test: <<html,
 <html>
   <head>
