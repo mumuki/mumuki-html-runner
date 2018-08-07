@@ -12,7 +12,10 @@ class HtmlPrecompileHook < Mumukit::Templates::MultiFilePrecompileHook
     document = Nokogiri::HTML(main_content)
     merge_script_tags! document, files_by_extension
     merge_style_tags! document, files_by_extension
+
     document.to_html
+      .gsub(/<!DOCTYPE[^>]+>/, '')
+      .gsub(/<meta[^>]+>/, '')
   end
 
   def files_of(request)

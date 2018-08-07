@@ -36,7 +36,7 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
-    context 'when extra code is equal to expected' do
+  context 'when extra code is equal to expected' do
     let(:test) { {content: '<body></body>', extra: '<html>/*...content...*/</html>',
                   test: '<html><body></body></html>'} }
 
@@ -47,6 +47,26 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when using multiple files' do
+    let(:test) { {"index.html": '<html><head><script src="foo.js"></script> <link rel="stylesheet" href="bar.css" /></head><body>Baz</body></html>',
+                  "foo.js": 'alert("foo");',
+                  "bar.css": '.red { color: red; }',
+                  test: <<html,
+<html>
+  <head>
+    <script>alert("foo");</script> <style>.red { color: red; }</style>
+  </head>
+  <body>Baz</body>
+</html>
+html
+} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
 
   context 'when using expectations only' do
     let(:test) { {

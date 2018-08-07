@@ -22,7 +22,7 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def hexp_without_blanks(content)
-    hexp ["\r", "\n", "\t"]
+    hexp %W(\r \n \t)
            .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
            .squeeze(' ')
   end
