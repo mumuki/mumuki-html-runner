@@ -1,36 +1,4 @@
-# // TODO: Move to mumukit
-class MultiFilePrecompileHook < Mumukit::Hook
-  def compile(request)
-    files = files_of request
-    content = files.empty? ? single_file_content(request) : multi_file_content(files)
-
-    struct request.to_h.merge content: content
-  end
-
-  def main_file
-    raise NotImplementedError
-  end
-
-  def consolidate(main_content, files)
-    raise NotImplementedError
-  end
-
-  def single_file_content(request)
-    request.content
-  end
-
-  def multi_file_content(files)
-    return files.values.first if files.count == 1
-
-    consolidate(files[main_file] || '', files)
-  end
-
-  def files_of(request)
-    request.to_stringified_h.select { |key, _| key.include? '.' }
-  end
-end
-
-class HtmlPrecompileHook < MultiFilePrecompileHook
+class HtmlPrecompileHook < Mumukit::Templates::MultiFilePrecompileHook
   VALID_EXTENSIONS = ['.html', '.js', '.css']
 
   def main_file
@@ -73,7 +41,7 @@ class HtmlPrecompileHook < MultiFilePrecompileHook
       return if rel != 'stylesheet'
 
       href = tag.get_attribute 'href'
-      file = files_by_extension.dig('css', src)
+      file = files_by_extension.dig('css', href)
       tag.replace("<style>#{file}</style>") if file.present?
     }
   end
