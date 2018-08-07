@@ -15,10 +15,6 @@ class HtmlPrecompileHook < Mumukit::Templates::MultiFilePrecompileHook
     document.to_html
   end
 
-  def single_file_content(request)
-    request.content.presence || request.extra
-  end
-
   def files_of(request)
     super(request).select { |file_name, _|
       VALID_EXTENSIONS.any? { |extension| file_name.end_with? extension }

@@ -5,13 +5,15 @@ class HtmlTestHook < Mumukit::Hook
 
   def run!(request)
     expected = request.test
-    actual = request.content
+    actual = compile_content request
     if expected.blank? || contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
       [render_fail_html(actual, expected), :failed]
     end
   end
+
+  private
 
   def contents_match?(expected, actual)
     hexp_without_blanks(expected) == hexp_without_blanks(actual)
@@ -63,4 +65,7 @@ html
 html
   end
 
+  def compile_content(request)
+    request.extra.presence || request.content
+  end
 end
