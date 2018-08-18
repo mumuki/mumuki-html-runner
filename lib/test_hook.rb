@@ -1,25 +1,19 @@
-require 'mumukit/hook'
-
-class String
-  def escape_html
-    ERB::Util.html_escape self
-  end
-end
-
 class HtmlTestHook < Mumukit::Hook
   def compile(request)
     request
   end
 
   def run!(request)
-    expected = request[:test]
-    actual = request[:extra].presence || request[:content]
+    expected = request.test
+    actual = compile_content request
     if expected.blank? || contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
       [render_fail_html(actual, expected), :failed]
     end
   end
+
+  private
 
   def contents_match?(expected, actual)
     hexp_without_blanks(expected) == hexp_without_blanks(actual)
@@ -28,7 +22,7 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def hexp_without_blanks(content)
-    hexp ["\r", "\n", "\t"]
+    hexp %W(\r \n \t)
            .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
            .squeeze(' ')
   end
@@ -71,4 +65,7 @@ html
 html
   end
 
+  def compile_content(request)
+    request.extra.presence || request.content
+  end
 end
