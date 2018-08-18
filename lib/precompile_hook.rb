@@ -19,29 +19,35 @@ class HtmlPrecompileHook < Mumukit::Templates::MultiFilePrecompileHook
   end
 
   def files_of(request)
-    super(request).select { |file_name, _|
-      VALID_EXTENSIONS.any? { |extension| file_name.end_with? extension }
-    }
+    super(request).select { |file_name, _| valid_extension? file_name }
   end
 
   private
 
+  def valid_extension?(file_name)
+    VALID_EXTENSIONS.any? { |extension| file_name.end_with? extension }
+  end
+
   def merge_script_tags!(document, files_by_extension)
-    document.xpath("//script").each { |tag|
-      src = tag.get_attribute 'src'
-      file = files_by_extension.dig('js', src)
-      tag.replace("<script>#{file}</script>") if file.present?
-    }
+    document.xpath("//script").each { |tag| replace_script_tag! tag, files_by_extension }
+  end
+
+  def replace_script_tag!(tag, files_by_extension)
+    src = tag.get_attribute 'src'
+    file = files_by_extension.dig('js', src)
+    tag.replace("<script>#{file}</script>") if file.present?
   end
 
   def merge_style_tags!(document, files_by_extension)
-    document.xpath("//link").each { |tag|
-      rel = tag.get_attribute 'rel'
-      return if rel != 'stylesheet'
+    document.xpath("//link").each { |tag| replace_style_tag! tag, files_by_extension }
+  end
 
-      href = tag.get_attribute 'href'
-      file = files_by_extension.dig('css', href)
-      tag.replace("<style>#{file}</style>") if file.present?
-    }
+  def replace_style_tag!(tag, files_by_extension)
+    rel = tag.get_attribute 'rel'
+    return if rel != 'stylesheet'
+
+    href = tag.get_attribute 'href'
+    file = files_by_extension.dig('css', href)
+    tag.replace("<style>#{file}</style>") if file.present?
   end
 end
