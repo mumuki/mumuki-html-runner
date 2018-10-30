@@ -1,11 +1,18 @@
+require_relative './test_script_hook'
+
 class HtmlTestHook < Mumukit::Hook
+  TEST_SCRIPT_HOOK = HtmlTestScriptHook.new
+
   def compile(request)
-    request
+    TEST_SCRIPT_HOOK.compile request
   end
 
   def run!(request)
-    expected = request.test
+    TEST_SCRIPT_HOOK.run! request
+
+    expected = expected_html request
     actual = compile_content request
+
     if expected.blank? || contents_match?(expected, actual)
       [render_html(actual), :passed]
     else
@@ -60,6 +67,7 @@ html
   def build_iframe(content)
     dom = hexp(content).to_dom
     <<html
+<h3>SCRIPT RESULTS HERE # TODO: Implement this</h3>
 <div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.escape_html}">
 </div>
 html
@@ -67,5 +75,9 @@ html
 
   def compile_content(request)
     request.extra.presence || request.content
+  end
+
+  def expected_html(request)
+    request.test.is_a?(Hash) ? request.test['output'] : request.test
   end
 end

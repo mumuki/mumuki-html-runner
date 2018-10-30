@@ -17,7 +17,17 @@
  directory, run the following commands:
 
   bundle install
+  ./bin/pull_worker.sh
 
+## Deploy docker image
+
+```
+cd worker/
+# docker login
+docker rmi mumuki/mumuki-html-worker
+docker build -t mumuki/mumuki-html-worker .
+docker push mumuki/mumuki-html-worker
+```
 
 ## RUN TESTS
 
