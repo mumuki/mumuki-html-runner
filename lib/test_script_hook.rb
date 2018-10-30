@@ -8,7 +8,7 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def run!(request)
-    return nil if script_test(request).blank?
+    return '' if script_test(request).blank?
 
     super request.file
   end
@@ -18,7 +18,8 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def compile_file_content(request)
-    "hola" # TODO: Implement
+    JSON.generate html: request.content,
+                  tests: script_test(request)
   end
 
   def post_process_file(_file, result, status)
