@@ -8,19 +8,40 @@ class HtmlTestHook < Mumukit::Hook
   end
 
   def run!(request)
-    TEST_SCRIPT_HOOK.run! request
+    test_script_results = TEST_SCRIPT_HOOK.run! request
 
     expected = expected_html request
     actual = compile_content request
 
-    if expected.blank? || contents_match?(expected, actual)
-      [render_html(actual), :passed]
+    status = status expected, actual, test_script_results
+    output = output(expected, actual)
+    if test_script_results.blank?
+      [output, status]
     else
-      [render_fail_html(actual, expected), :failed]
+      [test_script_results[1], output, status]
     end
   end
 
   private
+
+  def status(expected, actual, test_script_results = nil)
+    is_dom_ok = is_dom_ok(expected, actual) # TODO: Soportar testear scripts y no DOM
+    are_scripts_ok = are_scripts_ok(test_script_results)
+
+    is_dom_ok && are_scripts_ok ? :passed : :failed
+  end
+
+  def output(expected, actual)
+    is_dom_ok(expected, actual) ? render_html(actual) : render_fail_html(actual, expected)
+  end
+
+  def is_dom_ok(expected, actual)
+    expected.blank? || contents_match?(expected, actual)
+  end
+
+  def are_scripts_ok(results)
+    results.blank? || results[0] == :passed
+  end
 
   def contents_match?(expected, actual)
     hexp_without_blanks(expected) == hexp_without_blanks(actual)

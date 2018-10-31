@@ -8,13 +8,13 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def run!(request)
-    return '' if script_test(request).blank?
+    return nil if script_test(request).blank?
 
     super request.file
   end
 
   def command_line(filename)
-    "run-script-tests #{filename}"
+    "run-dom-tests #{filename}"
   end
 
   def compile_file_content(request)
@@ -23,11 +23,22 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def post_process_file(_file, result, status)
-    puts "EL RESULT ES", result
-    result
+    report = JSON.parse(result)
+    test_results = generate_test_results report
+    [status, test_results]
   end
 
   private
+
+  def generate_test_results(report)
+    report['tests'].map { |it|
+      [
+        it['fullTitle'],
+        it['err'].blank? ? :passed : :failed,
+        it['err']&.dig('message') || ''
+      ]
+    }
+  end
 
   def script_test(request)
     request.test['tests']
