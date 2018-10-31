@@ -86,7 +86,7 @@ html
   end
 
   def build_iframe(content)
-    dom = hexp(content).to_dom # TODO: Append script results here
+    dom = hexp(content).to_dom
     <<html
 <div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.escape_html}">
 </div>
