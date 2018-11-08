@@ -13,23 +13,16 @@ class HtmlTestHook < Mumukit::Hook
     expected = expected_html request
     actual = compile_content request
 
-    status = status expected, actual, test_script_results
+    status = is_dom_ok expected, actual
     output = output(expected, actual)
     if test_script_results.blank?
       [output, status]
     else
-      [test_script_results[1], output, status]
+      [test_script_results[1], output, status] # TODO: Soportar testear scripts y no DOM
     end
   end
 
   private
-
-  def status(expected, actual, test_script_results = nil)
-    is_dom_ok = is_dom_ok(expected, actual) # TODO: Soportar testear scripts y no DOM
-    are_scripts_ok = are_scripts_ok(test_script_results)
-
-    is_dom_ok && are_scripts_ok ? :passed : :failed
-  end
 
   def output(expected, actual)
     is_dom_ok(expected, actual) ? render_html(actual) : render_fail_html(actual, expected)
@@ -37,10 +30,6 @@ class HtmlTestHook < Mumukit::Hook
 
   def is_dom_ok(expected, actual)
     expected.blank? || contents_match?(expected, actual)
-  end
-
-  def are_scripts_ok(results)
-    results.blank? || results[0] == :passed
   end
 
   def contents_match?(expected, actual)
