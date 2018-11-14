@@ -17,7 +17,7 @@ class HtmlTestHook < Mumukit::Hook
     if script_test_results.blank?
       [dom_output, dom_status]
     else
-      [script_test_results, dom_output, dom_status] # TODO: Soportar testear scripts y no DOM
+      [script_test_results, dom_output, dom_status]
     end
   end
 
