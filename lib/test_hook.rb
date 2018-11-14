@@ -6,6 +6,7 @@ class HtmlTestHook < Mumukit::Hook
   TEST_SCRIPT_HOOK = HtmlTestScriptHook.new
 
   def compile(request)
+    request = struct request.to_h.merge options: options(request)
     TEST_SCRIPT_HOOK.compile TEST_DOM_HOOK.compile(request)
   end
 
@@ -18,5 +19,16 @@ class HtmlTestHook < Mumukit::Hook
     else
       [script_test_results, dom_output, dom_status] # TODO: Soportar testear scripts y no DOM
     end
+  end
+
+  private
+
+  def options(request)
+    return {} unless request.test.is_a?(Hash)
+
+    options_yaml = request.test['options']
+    return {} if options_yaml.blank?
+
+    YAML.load(options_yaml)
   end
 end
