@@ -4,10 +4,11 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def run!(request)
+    options = request.options
     expected = expected_html request
     actual = compile_content request
 
-    if is_dom_ok expected, actual
+    if is_dom_ok expected, actual, options
       [render_html(actual), :passed]
     else
       [render_fail_html(actual, expected), :failed]
@@ -16,24 +17,38 @@ class HtmlTestDomHook < Mumukit::Hook
 
   private
 
-  def is_dom_ok(expected, actual)
-    expected.blank? || contents_match?(expected, actual)
+  def is_dom_ok(expected, actual, options)
+    expected.blank? || contents_match?(expected, actual, options)
   end
 
-  def contents_match?(expected, actual)
-    hexp_without_blanks(expected) == hexp_without_blanks(actual)
+  def contents_match?(expected, actual, options)
+    comparable_hexp(expected, options) == comparable_hexp(actual, options)
   rescue
     expected == actual
   end
 
-  def hexp_without_blanks(content)
-    hexp %W(\r \n \t)
-           .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-           .squeeze(' ')
+  def comparable_hexp(content, options)
+    hexp_without_blanks = hexp %W(\r \n \t)
+       .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+       .squeeze(' ')
+
+    apply_options hexp_without_blanks, options
   end
 
   def hexp(squeezed_content)
     Hexp.parse("<html>#{squeezed_content}</html>")
+  end
+
+  def apply_options(hexp, options)
+    if options['output_ignore_scripts']
+      hexp = hexp.replace('script') { |_| [] }
+    end
+
+    if options['output_ignore_styles']
+      hexp = hexp.replace('style') { |_| [] }
+    end
+
+    hexp
   end
 
   def render_html(actual)
