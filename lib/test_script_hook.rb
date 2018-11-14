@@ -25,7 +25,8 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   def post_process_file(_file, result, status)
     report = JSON.parse(result)
     test_results = generate_test_results report
-    [status, test_results]
+
+    [test_results]
   end
 
   private
@@ -41,6 +42,6 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def script_test(request)
-    request.test['tests']
+    request.test.is_a?(Hash) ? request.test['tests'] : request.test
   end
 end
