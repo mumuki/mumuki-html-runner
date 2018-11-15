@@ -183,4 +183,45 @@ CONTENT
       it { expect(response[:result]).to include 'Unexpected token !' }
     end
   end
+
+  context 'when testing scripts only' do
+    let(:test) { <<TEST
+/*<tests#*/
+it("modifies the main message", function() {
+	oldDocument.querySelector("#message").innerHTML.should.be.eql("hello");
+	document.querySelector("#message").innerHTML.should.be.eql("I changed it from JS!");
+});
+/*#tests>*/
+TEST
+    }
+
+    context 'it works too' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <body>
+    <script src="foo.js"></script>
+    <strong id="message">hello</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.querySelector("#message").innerHTML = "I changed it from JS!";
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'modifies the main message', status: :passed, result: '' }
+                                                  ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+  end
 end
