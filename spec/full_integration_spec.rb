@@ -51,10 +51,10 @@ TEST
 <html>
   <head>
     <title>page title</title>
-    <script src="foo.js"></script>
   </head>
   <body>
     <strong id="message">hello</strong>
+    <script src="foo.js"></script>
   </body>
 </html>
 /*#index.html>*/
@@ -89,10 +89,10 @@ CONTENT
 <html>
   <head>
     <title>page title</title>
-    <script src="foo.js"></script>
   </head>
   <body>
     <strong id="message">hello</strong>
+    <script src="foo.js"></script>
   </body>
 </html>
 /*#index.html>*/
@@ -123,10 +123,10 @@ CONTENT
 <html>
   <head>
     <title>Solution to everyday problems</title>
-    <script src="foo.js"></script>
   </head>
   <body>
     <strong id="message">hello</strong>
+    <script src="foo.js"></script>
     <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>
   </body>
 </html>
@@ -159,10 +159,10 @@ CONTENT
 <html>
   <head>
     <title>Solution to everyday problems</title>
-    <script src="foo.js"></script>
   </head>
   <body>
     <strong id="message">hello</strong>
+    <script src="foo.js"></script>
   </body>
 </html>
 /*#index.html>*/
@@ -201,8 +201,8 @@ TEST
 /*<index.html#*/
 <html>
   <body>
-    <script src="foo.js"></script>
     <strong id="message">hello</strong>
+    <script src="foo.js"></script>
   </body>
 </html>
 /*#index.html>*/
