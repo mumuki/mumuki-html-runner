@@ -223,5 +223,52 @@ CONTENT
                                                   feedback: '',
                                                   expectation_results: [] }
     end
+
+    context 'events test' do
+      let(:test) { <<TEST
+/*<tests#*/
+it("when the user clicks the button, it shows an alert message", function() {
+	should.not.exist(_last_alert_message_);
+  
+  const button = document.querySelector("button");
+  _dispatch_('click', button);
+
+  _last_alert_message_.should.eql("Hi!");
+});
+/*#tests>*/
+TEST
+      }
+
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <script src="foo.js"></script>
+  <body>
+    <button>Say hello</button>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("button").addEventListener("click", () => {
+    alert("Hi!");
+  });
+});
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'when the user clicks the button, it shows an alert message', status: :passed, result: '' }
+                                                  ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
   end
 end
