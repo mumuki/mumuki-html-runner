@@ -79,10 +79,9 @@ html
         {binding: '*', inspection: 'DeclaresTag:h1'},
         {binding: 'body', inspection: 'DeclaresTag:h2'}]} }
 
-    it {
-      expect(response.except(:result)).to eq response_type: :unstructured,
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :passed_with_warnings,
+                                                status: :failed,
                                                 feedback: '',
                                                 expectation_results: [
                                                   {binding: '*', inspection: 'DeclaresTag:h1', result: :failed},
@@ -410,7 +409,7 @@ flex-direction: column;
 
     it { expect(response).to eq response_type: :unstructured,
                                 test_results: [],
-                                status: :passed_with_warnings,
+                                status: :failed,
                                 feedback: '',
                                  expectation_results: [
                                     {binding: 'css:.section', inspection: 'DeclaresStyle:display:flex', result: :failed},
@@ -429,7 +428,7 @@ flex-direction: column;
 
     it { expect(response).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :passed_with_warnings,
+                                                status: :failed,
                                                 feedback: '',
                                                 result: <<html,
 <div class="mu-browser" data-srcdoc="#{'<html><head><style>p {color: blue;}</style></head></html>'.escape_html}">
