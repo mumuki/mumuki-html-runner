@@ -36,12 +36,18 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
       [
         it['fullTitle'],
         it['err'].blank? ? :passed : :failed,
-        it['err']&.dig('message') || ''
+        create_error_tag(it['err']&.dig('message'))
       ]
     }
   end
 
   def script_test(request)
     request.test.is_a?(Hash) ? request.test['tests'] : request.test
+  end
+
+  def create_error_tag(message)
+    return '' if message.blank?
+
+    "<pre>#{message}</pre>"
   end
 end
