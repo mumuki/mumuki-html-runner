@@ -1,5 +1,5 @@
 class HtmlTestScriptHook < Mumukit::Templates::FileHook
-  isolated false # TODO: Make it true and push the worker
+  isolated true
 
   def compile(request)
     return request if script_test(request).blank?
