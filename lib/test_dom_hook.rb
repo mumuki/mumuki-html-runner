@@ -28,27 +28,34 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def comparable_hexp(content, options)
-    hexp_without_blanks = hexp %W(\r \n \t)
-       .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-       .squeeze(' ')
+    html = transform_content content, options
 
-    apply_options hexp_without_blanks, options
+    hexp_without_blanks html
+  end
+
+  def transform_content(content, options)
+    return content unless options.present?
+    exp = hexp_without_blanks content
+
+    if options['output_ignore_scripts']
+      exp = exp.replace('script') { |_| [] }
+    end
+
+    if options['output_ignore_styles']
+      exp = exp.replace('style') { |_| [] }
+    end
+
+    exp.to_html
+  end
+
+  def hexp_without_blanks(content)
+    hexp %W(\r \n \t)
+           .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+           .squeeze(' ')
   end
 
   def hexp(squeezed_content)
     Hexp.parse("<html>#{squeezed_content}</html>")
-  end
-
-  def apply_options(hexp, options)
-    if options['output_ignore_scripts']
-      hexp = hexp.replace('script') { |_| [] }
-    end
-
-    if options['output_ignore_styles']
-      hexp = hexp.replace('style') { |_| [] }
-    end
-
-    hexp
   end
 
   def render_html(actual)
