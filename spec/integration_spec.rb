@@ -79,7 +79,8 @@ html
         {binding: '*', inspection: 'DeclaresTag:h1'},
         {binding: 'body', inspection: 'DeclaresTag:h2'}]} }
 
-    it { expect(response.except(:result)).to eq response_type: :unstructured,
+    it {
+      expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
                                                 status: :passed_with_warnings,
                                                 feedback: '',

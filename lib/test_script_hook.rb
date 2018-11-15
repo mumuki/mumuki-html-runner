@@ -42,7 +42,7 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
   end
 
   def script_test(request)
-    request.test.is_a?(Hash) ? request.test['tests'] : request.test
+    request.test.is_a?(Hash) ? request.test['tests'] : nil
   end
 
   def create_error_tag(message)
