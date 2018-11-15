@@ -27,6 +27,8 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
     test_results = generate_test_results report
 
     [test_results]
+  rescue
+    [:errored, result]
   end
 
   private

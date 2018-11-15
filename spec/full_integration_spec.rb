@@ -44,8 +44,9 @@ output_ignore_scripts: true
 TEST
   }
 
-    let(:request) { {
-      content: <<CONTENT,
+    context 'when everything is OK' do
+      let(:request) { {
+        content: <<CONTENT,
 /*<index.html#*/
 <html>
   <head>
@@ -63,23 +64,123 @@ document.querySelector("#message").innerHTML = "I changed it from JS!";
 alert("Hey!!");
 /*#foo.js>*/
 CONTENT
-      test: test,
-      expectations: [
-        {binding: 'body', inspection: 'DeclaresTag:strong'}
-      ]
-    } }
+        test: test,
+        expectations: [
+          {binding: 'body', inspection: 'DeclaresTag:strong'}
+        ]
+      } }
 
-    it { expect(response.except(:result)).to eq response_type: :mixed,
-                                                test_results: [
-                                                  { title: 'modifies the main message', status: :passed, result: '' },
-                                                  { title: 'calls alert() saying hey', status: :passed, result: '' },
-                                                ],
-                                                status: :passed,
-                                                feedback: '',
-                                                expectation_results: [
-                                                  {binding: 'body', inspection: 'DeclaresTag:strong', result: :passed}
-                                                ] }
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'modifies the main message', status: :passed, result: '' },
+                                                    { title: 'calls alert() saying hey', status: :passed, result: '' },
+                                                  ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [
+                                                    {binding: 'body', inspection: 'DeclaresTag:strong', result: :passed}
+                                                  ] }
+    end
+
+    context 'when the tests dont pass but the DOM is OK' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+    <script src="foo.js"></script>
+  </head>
+  <body>
+    <strong id="message">hello</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.querySelector("#message").innerHTML = "sarasa";
+alert("Hey!!");
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'modifies the main message', status: :failed, result: "<pre>expected 'sarasa' to deeply equal 'I changed it from JS!'</pre>" },
+                                                    { title: 'calls alert() saying hey', status: :passed, result: '' },
+                                                  ],
+                                                  status: :failed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+
+    context 'when the tests pass but the DOM is wrong' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>Solution to everyday problems</title>
+    <script src="foo.js"></script>
+  </head>
+  <body>
+    <strong id="message">hello</strong>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.querySelector("#message").innerHTML = "I changed it from JS!";
+alert("Hey!!");
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'modifies the main message', status: :passed, result: '' },
+                                                    { title: 'calls alert() saying hey', status: :passed, result: '' },
+                                                  ],
+                                                  status: :failed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+      it { expect(response[:result]).to include '<strong>Expected</strong>' }
+    end
+
+    context 'when JS code is broken' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>Solution to everyday problems</title>
+    <script src="foo.js"></script>
+  </head>
+  <body>
+    <strong id="message">hello</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.querySelec!&
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :errored,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+      it { expect(response[:result]).to include 'Unexpected token !' }
+    end
   end
-
-
 end

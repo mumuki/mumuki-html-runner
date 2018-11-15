@@ -12,7 +12,9 @@ class HtmlTestHook < Mumukit::Hook
 
   def run!(request)
     dom_output, dom_status = TEST_DOM_HOOK.run! request
-    script_test_results = TEST_SCRIPT_HOOK.run!(request)&.first
+    script_results = TEST_SCRIPT_HOOK.run!(request)
+    return ["<pre>#{script_results&.last}</pre>", :errored] if script_results&.first == :errored
+    script_test_results = script_results&.first
 
     if script_test_results.blank?
       [dom_output, dom_status]
