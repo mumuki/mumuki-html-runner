@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.4'
   spec.add_development_dependency 'codeclimate-test-reporter'
   spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'mumukit-bridge', '~> 3.0'
+  spec.add_development_dependency 'mumukit-bridge', '~> 3.8'
 end
