@@ -270,5 +270,75 @@ CONTENT
                                                   feedback: '',
                                                   expectation_results: [] }
     end
+
+    context 'AJAX test' do
+      let(:test) { <<TEST
+/*<tests#*/
+describe("AJAX:", function() {
+  it("shows the downloaded content when the button is clicked", function(done) {
+    document.querySelector("#data").innerHTML.should.eql("Nothing yet...");
+
+    _nock_.cleanAll();
+    const mockedGet = _nock_("https://some-domain.com/")
+      .get("/some-data.json")
+      .reply(200, { content: "Some remote data" });
+
+    _dispatch_('click', document.querySelector("#get-data"));
+
+    _wait_for_(() => mockedGet.isDone(), () => {
+      document.querySelector("#data").innerHTML.should.eql("Some remote data");
+      done();
+    });
+  });
+});
+/*#tests>*/
+TEST
+      }
+
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>ajax</title>
+    <script src="getData.js"></script>
+  </head>
+  <body>
+    <div>
+      <button id="get-data">GET DATA NOW!</button>
+    </div>
+
+    <h1>Remote data:</h1>
+    <pre id="data">Nothing yet...</pre>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<getData.js#*/
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("#get-data").addEventListener("click", () => {
+    fetch("https://some-domain.com/some-data.json")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        document.querySelector("#data").innerHTML = data.content;
+      });
+  });
+});
+/*#getData.js>*/
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'AJAX: shows the downloaded content when the button is clicked', status: :passed, result: '' }
+                                                  ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
   end
 end
