@@ -26,9 +26,9 @@ class HtmlTestScriptHook < Mumukit::Templates::FileHook
     report = JSON.parse(result)
     test_results = generate_test_results report
 
-    [test_results]
+    [test_results, :passed]
   rescue
-    [:errored, result]
+    [result, :errored]
   end
 
   private
