@@ -38,11 +38,11 @@ class HtmlTestDomHook < Mumukit::Hook
     exp = hexp_without_blanks content
 
     if options['output_ignore_scripts']
-      exp = exp.replace('script') { |_| [] }
+      exp = exp.replace('script') { [] }
     end
 
     if options['output_ignore_styles']
-      exp = exp.replace('style') { |_| [] }
+      exp = exp.replace('style') { [] }
     end
 
     exp.to_html
