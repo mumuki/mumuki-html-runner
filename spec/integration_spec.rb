@@ -47,6 +47,17 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when code is equal to expected, but has inner trailing whitespaces' do
+    let(:test) { {content: '<ul><li> Programación con objetos </li><li> Ruby </li><li> HTML </li></ul>',
+                  test: '<ul><li>Programación con objetos</li><li>Ruby</li><li>HTML</li></ul>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
   context 'when using multiple files' do
     let(:test) { {
                   content: <<content,

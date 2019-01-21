@@ -34,7 +34,8 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def transform_content(content, options)
-    return content unless options.present?
+    return remove_inner_whitespaces(content) unless options.present?
+
     exp = hexp_without_blanks content
 
     if options['output_ignore_scripts']
@@ -45,7 +46,27 @@ class HtmlTestDomHook < Mumukit::Hook
       exp = exp.replace('style') { [] }
     end
 
+    unless options['maintain_inner_whitespaces']
+      exp = remove_inner_whitespaces exp
+    end
+
     exp.to_html
+  end
+
+  def remove_inner_whitespaces(content)
+    content = hexp_without_blanks(content)
+    content = remove_whitespaces_in_children_recursively content
+    content.to_html
+  end
+
+  def remove_whitespaces_in_children_recursively(hexp)
+    hexp.map_children do |node|
+      unless node.text?
+        next remove_whitespaces_in_children_recursively(node)
+      end
+
+      node.strip.empty? ? node : node.strip
+    end
   end
 
   def hexp_without_blanks(content)
