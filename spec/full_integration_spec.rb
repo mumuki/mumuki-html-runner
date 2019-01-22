@@ -42,7 +42,7 @@ it("calls alert() saying hey", function() {
 output_ignore_scripts: true
 /*#options>*/
 TEST
-  }
+    }
 
     context 'when everything is OK' do
       let(:request) { {
@@ -66,7 +66,7 @@ alert("Hey!!");
 CONTENT
         test: test,
         expectations: [
-          {binding: 'body', inspection: 'DeclaresTag:strong'}
+          { binding: 'body', inspection: 'DeclaresTag:strong' }
         ]
       } }
 
@@ -78,7 +78,7 @@ CONTENT
                                                   status: :passed,
                                                   feedback: '',
                                                   expectation_results: [
-                                                    {binding: 'body', inspection: 'DeclaresTag:strong', result: :passed}
+                                                    { binding: 'body', inspection: 'DeclaresTag:strong', result: :passed }
                                                   ] }
     end
 
@@ -336,6 +336,51 @@ CONTENT
                                                   test_results: [
                                                     { title: 'AJAX: shows the downloaded content when the button is clicked', status: :passed, result: '' }
                                                   ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+  end
+
+  context 'when testing DOM options' do
+    let(:test) { <<TEST
+/*<output#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message"> hello </strong>
+  </body>
+</html>
+/*#output>*/
+
+/*<options#*/
+maintain_inner_whitespaces: true
+/*#options>*/
+TEST
+    }
+    context 'when whitespaces are maintained' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message"> hello </strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
                                                   status: :passed,
                                                   feedback: '',
                                                   expectation_results: [] }
