@@ -360,7 +360,7 @@ maintain_inner_whitespaces: true
 /*#options>*/
 TEST
     }
-    context 'when whitespaces are maintained' do
+    context 'when whitespaces are maintained and respected' do
       let(:request) { {
         content: <<CONTENT,
 /*<index.html#*/
@@ -382,6 +382,32 @@ CONTENT
       it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                   test_results: [],
                                                   status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+
+    context 'when whitespaces are maintained and ignored' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message">hello</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :failed,
                                                   feedback: '',
                                                   expectation_results: [] }
     end
