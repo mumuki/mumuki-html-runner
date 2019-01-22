@@ -243,7 +243,7 @@ html
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :failed,
+                                                status: :passed,
                                                 feedback: '',
                                                 expectation_results: [] }
   end
@@ -270,8 +270,8 @@ html
                                                 expectation_results: [] }
   end
 
-  context 'when code has extra new-lines' do
-    let(:test) { {content: "<html>\n</html>",
+  context 'when code has extra head' do
+    let(:test) { {content: "<html><head></head></html>",
                   test: '<html></html>'} }
 
     it { expect(response).to eq response_type: :unstructured,
@@ -281,7 +281,7 @@ html
                                 result: <<html,
 <br>
 <strong>Actual</strong>
-<div class="mu-browser" data-srcdoc="#{"<html>\n</html>".escape_html}">
+<div class="mu-browser" data-srcdoc="#{"<html><head></head></html>".escape_html}">
 </div>
 
 <br>
@@ -292,6 +292,22 @@ html
 html
                                 expectation_results: [] }
   end
+
+  context 'when code has extra new-lines' do
+    let(:test) { {content: "<html>\n</html>",
+                  test: "<html></html>"} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{"<html>\n</html>".escape_html}">
+</div>
+html
+                                expectation_results: [] }
+  end
+
 
   context 'when code has repeated new-lines' do
     let(:test) { {content: "<html>\n\n</html>",

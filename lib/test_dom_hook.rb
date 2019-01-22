@@ -1,3 +1,9 @@
+class Hexp::Node
+  def flat_map_children(&blk)
+    H[tag, attributes, children.flat_map(&blk)]
+  end
+end
+
 class HtmlTestDomHook < Mumukit::Hook
   def compile(request)
     request
@@ -45,15 +51,13 @@ class HtmlTestDomHook < Mumukit::Hook
     unless options['keep_outer_whitespaces']
       exp = remove_whitespaces_recursively exp
     end
-
     exp
   end
 
   def remove_whitespaces_recursively(hexp)
-    hexp.map_children do |node|
+    hexp.flat_map_children do |node|
       next remove_whitespaces_recursively(node) unless node.text?
-
-      node.strip.empty? ? node : node.strip
+      [node.strip.presence].compact
     end
   end
 
@@ -63,8 +67,8 @@ class HtmlTestDomHook < Mumukit::Hook
            .squeeze(' ')
   end
 
-  def hexp(squeezed_content)
-    Hexp.parse("<html>#{squeezed_content}</html>")
+  def hexp(content)
+    Hexp.parse("<html>#{content}</html>")
   end
 
   def render_html(actual)
