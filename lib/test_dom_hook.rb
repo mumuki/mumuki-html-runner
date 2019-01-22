@@ -34,8 +34,6 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def transform_content(content, options)
-    return remove_inner_whitespaces(content) unless options.present?
-
     if options['keep_inner_whitespaces']
       exp = hexp content
     else
