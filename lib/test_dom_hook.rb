@@ -54,9 +54,7 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def remove_inner_whitespaces(content)
-    content = hexp_without_blanks(content)
-    content = remove_whitespaces_recursively content
-    content.to_html
+    remove_whitespaces_recursively(hexp_without_blanks(content)).to_html
   end
 
   def remove_whitespaces_recursively(hexp)
