@@ -49,14 +49,14 @@ class HtmlTestDomHook < Mumukit::Hook
     end
 
     unless options['maintain_inner_whitespaces']
-      return remove_inner_whitespaces (exp.to_html)
+      exp = remove_inner_whitespaces(exp.to_html)
     end
 
     exp.to_html
   end
 
   def remove_inner_whitespaces(content)
-    remove_whitespaces_recursively(hexp_without_blanks(content)).to_html
+    remove_whitespaces_recursively(hexp_without_blanks(content))
   end
 
   def remove_whitespaces_recursively(hexp)
