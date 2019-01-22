@@ -28,12 +28,6 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def comparable_hexp(content, options)
-    html = transform_content content, options
-
-    hexp_without_blanks html
-  end
-
-  def transform_content(content, options)
     if options['keep_inner_whitespaces']
       exp = hexp content
     else
@@ -48,15 +42,11 @@ class HtmlTestDomHook < Mumukit::Hook
       exp = exp.replace('style') { [] }
     end
 
-    unless options['maintain_inner_whitespaces']
-      exp = remove_inner_whitespaces(exp.to_html)
+    unless options['keep_outer_whitespaces']
+      exp = remove_whitespaces_recursively exp
     end
 
-    exp.to_html
-  end
-
-  def remove_inner_whitespaces(content)
-    remove_whitespaces_recursively(hexp_without_blanks(content))
+    exp
   end
 
   def remove_whitespaces_recursively(hexp)
