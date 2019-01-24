@@ -8,9 +8,13 @@
 > Sinatra server for validating HTML exercises within [Mumuki](http://github.com/mumuki)
 
 ## Prerequisites
-  Install rbenv:
+  Install `rbenv`:
 
 >You can install rbenv following the instructions of this [Link](http://uqbar-wiki.org/index.php?title=Gu%C3%ADa_de_Instalaci%C3%B3n_de_Ruby)
+
+  Install `docker`
+
+>You can install docker following the instructions of this [Link](https://docs.docker.com/get-started/)
 
 ## Setup
  Open  the Terminal Console, located in this project's
@@ -49,7 +53,7 @@ Also you can all the tests running the following command:
 
     bundle exec rake
 
-If you want to run the test using rubymine just look for the "spec"     folder inside mumuki-html-runner project, right click on the      prevously mention folder and click on "Run all Specs..." option.
+If you want to run the test using rubymine just look for the "spec"     folder inside mumuki-html-runner project, right click on the      previously mentioned folder and click on "Run all Specs..." option.
 
 If you have done the steps correctly both ways of running test should do it successfully.
 

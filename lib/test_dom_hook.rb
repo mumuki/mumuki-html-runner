@@ -1,3 +1,9 @@
+class Hexp::Node
+  def flat_map_children(&blk)
+    H[tag, attributes, children.flat_map(&blk)]
+  end
+end
+
 class HtmlTestDomHook < Mumukit::Hook
   def compile(request)
     request
@@ -28,34 +34,29 @@ class HtmlTestDomHook < Mumukit::Hook
   end
 
   def comparable_hexp(content, options)
-    html = transform_content content, options
-
-    hexp_without_blanks html
+    content = squeeze_inner_whitespaces content unless options['keep_inner_whitespaces']
+    exp = hexp content
+    exp = exp.replace('script') { [] } if options['output_ignore_scripts']
+    exp = exp.replace('style') { [] } if options['output_ignore_styles']
+    exp = remove_outer_whitespaces exp unless options['keep_outer_whitespaces']
+    exp
   end
 
-  def transform_content(content, options)
-    return content unless options.present?
-    exp = hexp_without_blanks content
-
-    if options['output_ignore_scripts']
-      exp = exp.replace('script') { [] }
+  def remove_outer_whitespaces(hexp)
+    hexp.flat_map_children do |node|
+      next remove_outer_whitespaces(node) unless node.text?
+      [node.strip.presence].compact
     end
-
-    if options['output_ignore_styles']
-      exp = exp.replace('style') { [] }
-    end
-
-    exp.to_html
   end
 
-  def hexp_without_blanks(content)
-    hexp %W(\r \n \t)
-           .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
-           .squeeze(' ')
+  def squeeze_inner_whitespaces(content)
+    %W(\r \n \t)
+        .reduce(content.strip) { |c, it| c.gsub(it, ' ') }
+        .squeeze(' ')
   end
 
-  def hexp(squeezed_content)
-    Hexp.parse("<html>#{squeezed_content}</html>")
+  def hexp(content)
+    Hexp.parse("<html>#{content}</html>")
   end
 
   def render_html(actual)

@@ -42,7 +42,7 @@ it("calls alert() saying hey", function() {
 output_ignore_scripts: true
 /*#options>*/
 TEST
-  }
+    }
 
     context 'when everything is OK' do
       let(:request) { {
@@ -66,7 +66,7 @@ alert("Hey!!");
 CONTENT
         test: test,
         expectations: [
-          {binding: 'body', inspection: 'DeclaresTag:strong'}
+          { binding: 'body', inspection: 'DeclaresTag:strong' }
         ]
       } }
 
@@ -78,7 +78,7 @@ CONTENT
                                                   status: :passed,
                                                   feedback: '',
                                                   expectation_results: [
-                                                    {binding: 'body', inspection: 'DeclaresTag:strong', result: :passed}
+                                                    { binding: 'body', inspection: 'DeclaresTag:strong', result: :passed }
                                                   ] }
     end
 
@@ -229,7 +229,7 @@ CONTENT
 /*<tests#*/
 it("when the user clicks the button, it shows an alert message", function() {
 	should.not.exist(_last_alert_message_);
-  
+
   const button = document.querySelector("button");
   _dispatch_('click', button);
 
@@ -337,6 +337,148 @@ CONTENT
                                                     { title: 'AJAX: shows the downloaded content when the button is clicked', status: :passed, result: '' }
                                                   ],
                                                   status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+  end
+
+  context 'when using keep_inner_whitespaces' do
+    let(:test) { <<TEST
+/*<output#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message"> hello world </strong>
+  </body>
+</html>
+/*#output>*/
+
+/*<options#*/
+keep_inner_whitespaces: true
+/*#options>*/
+TEST
+    }
+    context 'when inner whitespaces are kept and respected' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message">hello world</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+
+    context 'when inner whitespaces are kept and ignored' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message">hello   world</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :failed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+  end
+
+  context 'when using keep_outer_whitespaces' do
+    let(:test) { <<TEST
+/*<output#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message"> hello world </strong>
+  </body>
+</html>
+/*#output>*/
+
+/*<options#*/
+keep_outer_whitespaces: true
+/*#options>*/
+TEST
+    }
+    context 'when outer whitespaces are kept and respected' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message"> hello  world </strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [] }
+    end
+
+    context 'when outer whitespaces are kept and ignored' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message">hello world</strong>
+  </body>
+</html>
+/*#index.html>*/
+
+CONTENT
+        test: test,
+        expectations: []
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                  test_results: [],
+                                                  status: :failed,
                                                   feedback: '',
                                                   expectation_results: [] }
     end

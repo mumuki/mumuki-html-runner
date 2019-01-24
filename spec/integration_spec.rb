@@ -47,6 +47,17 @@ describe 'integration test' do
                                                 expectation_results: [] }
   end
 
+  context 'when code is equal to expected, but has inner trailing whitespaces' do
+    let(:test) { {content: '<ul><li> Programación con objetos </li><li> Ruby </li><li> HTML </li></ul>',
+                  test: '<ul><li>Programación con objetos</li><li>Ruby</li><li>HTML</li></ul>'} }
+
+    it { expect(response.except(:result)).to eq response_type: :unstructured,
+                                                test_results: [],
+                                                status: :passed,
+                                                feedback: '',
+                                                expectation_results: [] }
+  end
+
   context 'when using multiple files' do
     let(:test) { {
                   content: <<content,
@@ -232,7 +243,7 @@ html
 
     it { expect(response.except(:result)).to eq response_type: :unstructured,
                                                 test_results: [],
-                                                status: :failed,
+                                                status: :passed,
                                                 feedback: '',
                                                 expectation_results: [] }
   end
@@ -259,8 +270,8 @@ html
                                                 expectation_results: [] }
   end
 
-  context 'when code has extra new-lines' do
-    let(:test) { {content: "<html>\n</html>",
+  context 'when code has extra head' do
+    let(:test) { {content: "<html><head></head></html>",
                   test: '<html></html>'} }
 
     it { expect(response).to eq response_type: :unstructured,
@@ -270,7 +281,7 @@ html
                                 result: <<html,
 <br>
 <strong>Actual</strong>
-<div class="mu-browser" data-srcdoc="#{"<html>\n</html>".escape_html}">
+<div class="mu-browser" data-srcdoc="#{"<html><head></head></html>".escape_html}">
 </div>
 
 <br>
@@ -281,6 +292,22 @@ html
 html
                                 expectation_results: [] }
   end
+
+  context 'when code has extra new-lines' do
+    let(:test) { {content: "<html>\n</html>",
+                  test: "<html></html>"} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                feedback: '',
+                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{"<html>\n</html>".escape_html}">
+</div>
+html
+                                expectation_results: [] }
+  end
+
 
   context 'when code has repeated new-lines' do
     let(:test) { {content: "<html>\n\n</html>",
