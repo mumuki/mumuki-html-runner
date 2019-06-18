@@ -21,3 +21,5 @@ require_relative './precompile_hook'
 require_relative './test_hook'
 require_relative './checker'
 require_relative './expectations_hook'
+require_relative './assets_server'
+

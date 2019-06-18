@@ -57,3 +57,6 @@ If you want to run the test using rubymine just look for the "spec"     folder i
 
 If you have done the steps correctly both ways of running test should do it successfully.
 
+## Considerations
+
+When using multiple files, it assumes that the main file will be called `index.html`.
