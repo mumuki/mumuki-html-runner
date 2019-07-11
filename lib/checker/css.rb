@@ -8,6 +8,10 @@ class String
   def words
     split(' ')
   end
+
+  def comma_separated_words
+    split(',').map(&:strip)
+  end
 end
 
 module Checker
@@ -35,17 +39,30 @@ module Checker
     end
 
     def self.inspect_property(parser, inspection, binding)
-      property, value = parse_target(inspection.target)
+      property, _ = parse_target(inspection.target)
       parser.dig(binding, property).present?
     end
 
     def self.inspect_property_and_value(parser, inspection, binding)
       property, value = parse_target(inspection.target)
-      parser.dig(binding, property)&.words&.include? value
+      actual_value = parser.dig(binding, property) || ''
+      values_match? value, actual_value
+    end
+
+    def self.values_match?(inspection_value, actual_value)
+      if inspection_value.include? ','
+        comma_separated_values_match? inspection_value, actual_value
+      else
+        actual_value.words.include? inspection_value
+      end
     end
 
     def self.parse_target(target)
-     target.to_s.split(':')
+      target.to_s.split(':')
+    end
+
+    def self.comma_separated_values_match?(inspection_value, actual_value)
+      inspection_value.comma_separated_words == actual_value.comma_separated_words
     end
   end
 end
