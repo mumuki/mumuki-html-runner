@@ -5,8 +5,9 @@ class CssParser::Parser
 end
 
 class String
-  def words
-    split(' ')
+  # Avoids properties like rgb(5, 10, 15) to be split
+  def css_values
+    scan /\w+(?:\(.*\))?/
   end
 
   def comma_separated_words
@@ -55,7 +56,7 @@ module Checker
       if inspection_value =~ COMMA_SEPARATED_INSPECTION_REGEX
         comma_separated_values_match? inspection_value, actual_value
       else
-        actual_value.words.include? inspection_value
+        actual_value.css_values.include? inspection_value
       end
     end
 
