@@ -17,7 +17,8 @@ end
 
 module Checker
   class CSS
-    COMMA_SEPARATED_INSPECTION_REGEX = /^([\w-]+\s*)(,\s*[\w-]+\s*)+$/
+    CSS_VALID_VALUE = /\s*[\"\']?[\w\-\s]+[\"\']?\s*/
+    COMMA_SEPARATED_INSPECTION_REGEX = /^(#{CSS_VALID_VALUE})(,#{CSS_VALID_VALUE})+$/
 
     def self.run(document, expectation, binding)
       content = document.xpath('//style').text.presence || document.text
