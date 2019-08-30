@@ -80,7 +80,7 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle'}, result: true} ] }
   end
   describe 'body DeclaresStyle:' do
-    let(:code) { '<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: red} div.withBorder { border: 12px solid rgb(5, 5, 5); } div.withSpecificFont { font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif; }</style> </head>'}
+    let(:code) { '<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: red} div.withBorder { border: 12px solid rgb(5, 5, 5); } div.withSpecificFont { font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif; } div.withFontSize { font-size: 1.5em; }</style> </head>'}
     let(:expectations) { [
         {binding: 'css:h2', inspection: 'DeclaresStyle:color'},
         {binding: 'css:h2', inspection: 'DeclaresStyle:color:red'},
@@ -88,6 +88,7 @@ describe HtmlExpectationsHook do
         {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:rgb(5, 5, 5)'},
         {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:solid'},
         {binding: 'css:div.withSpecificFont', inspection: 'DeclaresStyle:font-family:"Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif'},
+        {binding: 'css:div.withFontSize', inspection: 'DeclaresStyle:font-size:1.5em'},
         {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'},
         {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}] }
 
@@ -99,6 +100,7 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:rgb(5, 5, 5)'}, result: true},
         { expectation: {binding: 'css:div.withBorder', inspection: 'DeclaresStyle:border:solid'}, result: true},
         { expectation: {binding: 'css:div.withSpecificFont', inspection: 'DeclaresStyle:font-family:"Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif'}, result: true},
+        { expectation: {binding: 'css:div.withFontSize', inspection: 'DeclaresStyle:font-size:1.5em'}, result: true},
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'}, result: true},
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
