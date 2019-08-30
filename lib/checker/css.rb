@@ -7,7 +7,7 @@ end
 class String
   # Avoids properties like rgb(5, 10, 15) to be split
   def css_values
-    scan /\w+(?:\(.*\))?/
+    scan /[^\s]+\(\s*\g<0>\s*(?:,\s*\g<0>)*\)|[^\s]+/
   end
 
   def comma_separated_words
