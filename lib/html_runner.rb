@@ -1,4 +1,5 @@
 require 'mumukit'
+require 'mumukit/inspection'
 require 'yaml'
 require 'nokogiri'
 require 'hexp'
