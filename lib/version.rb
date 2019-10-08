@@ -1,3 +1,3 @@
 module HtmlVersionHook
-  VERSION = '1.10.6'
+  VERSION = '1.11.0'
 end
