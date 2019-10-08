@@ -13,7 +13,7 @@ class HtmlExpectationsHook < Mumukit::Hook
   private
 
   def evaluate_expectation(raw, document)
-    expectation = Mumukit::Inspection::Expectation.parse(raw.with_indifferent_access)
+    expectation = Mulang::Expectation.parse(raw.with_indifferent_access)
     binding = expectation.binding.gsub(/(css:)|(html:)/, '')
     matches = checker_for(expectation).run document, expectation, binding
     {expectation: raw, result: negate(expectation, matches)}
