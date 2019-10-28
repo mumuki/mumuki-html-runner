@@ -26,3 +26,4 @@ require_relative './assets_server'
 require_relative './version'
 
 Mulang::Inspection.register_extension! Mumukit::Inspection::Css
+Mulang::Inspection.register_extension! Mumukit::Inspection::Html
