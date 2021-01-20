@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'mumukit', '~> 2.33'
-  spec.add_dependency 'mumukit-inspection', '~> 5.1'
+  spec.add_dependency 'mumukit', '~> 2.38'
+  spec.add_dependency 'mumukit-inspection', '~> 6.0'
   spec.add_dependency 'hexp', '~> 0.4'
   spec.add_dependency 'css_parser', '~> 1.6'
 
