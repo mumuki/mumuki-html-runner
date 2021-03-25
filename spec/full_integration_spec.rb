@@ -29,12 +29,12 @@ describe 'full exercises (DOM & scripts) integration test' do
 
 /*<tests#*/
 it("modifies the main message", function() {
-	oldDocument.querySelector("#message").innerHTML.should.be.eql("hello");
+	_originalDocument_.querySelector("#message").innerHTML.should.be.eql("hello");
 	document.querySelector("#message").innerHTML.should.be.eql("I changed it from JS!");
 });
 
 it("calls alert() saying hey", function() {
-  _last_alert_message_.should.eql("Hey!!");
+  _shiftAlertMessage_().should.eql("Hey!!");
 });
 /*#tests>*/
 
@@ -45,6 +45,44 @@ TEST
     }
 
     context 'when everything is OK' do
+      let(:request) { {
+        content: <<CONTENT,
+/*<index.html#*/
+<html>
+  <head>
+    <title>page title</title>
+  </head>
+  <body>
+    <strong id="message">hello</strong>
+    <script src="foo.js"></script>
+  </body>
+</html>
+/*#index.html>*/
+
+/*<foo.js#*/
+document.querySelector("#message").innerHTML = "I changed it from JS!";
+alert("Hey!!");
+/*#foo.js>*/
+CONTENT
+        test: test,
+        expectations: [
+          { binding: 'body', inspection: 'DeclaresTag:strong' }
+        ]
+      } }
+
+      it { expect(response.except(:result)).to eq response_type: :mixed,
+                                                  test_results: [
+                                                    { title: 'modifies the main message', status: :passed, result: '' },
+                                                    { title: 'calls alert() saying hey', status: :passed, result: '' },
+                                                  ],
+                                                  status: :passed,
+                                                  feedback: '',
+                                                  expectation_results: [
+                                                    { binding: 'body', inspection: 'DeclaresTag:strong', result: :passed }
+                                                  ] }
+    end
+
+    context 'when everything is OK with deprecated API' do
       let(:request) { {
         content: <<CONTENT,
 /*<index.html#*/
@@ -188,7 +226,7 @@ CONTENT
     let(:test) { <<TEST
 /*<tests#*/
 it("modifies the main message", function() {
-	oldDocument.querySelector("#message").innerHTML.should.be.eql("hello");
+	_originalDocument_.querySelector("#message").innerHTML.should.be.eql("hello");
 	document.querySelector("#message").innerHTML.should.be.eql("I changed it from JS!");
 });
 /*#tests>*/
@@ -228,12 +266,12 @@ CONTENT
       let(:test) { <<TEST
 /*<tests#*/
 it("when the user clicks the button, it shows an alert message", function() {
-	should.not.exist(_last_alert_message_);
+	should.not.exist(_shiftAlertMessage_());
 
   const button = document.querySelector("button");
   _dispatch_('click', button);
 
-  _last_alert_message_.should.eql("Hi!");
+  _shiftAlertMessage_().should.eql("Hi!");
 });
 /*#tests>*/
 TEST
