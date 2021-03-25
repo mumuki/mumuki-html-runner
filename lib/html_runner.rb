@@ -9,7 +9,7 @@ I18n.load_translations_path File.join(__dir__, 'locales', '*.yml')
 
 Mumukit.runner_name = 'html'
 Mumukit.configure do |config|
-  config.docker_image = 'mumuki/mumuki-html-worker:1.4'
+  config.docker_image = 'mumuki/mumuki-html-worker:2.0'
   config.content_type = 'html'
   config.process_expectations_on_empty_content = true
   config.run_test_hook_on_empty_test = true
