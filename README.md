@@ -5,9 +5,11 @@
 [![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-html-runner/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-html-runner/coverage)
 
 # mumuki-html-runner
+
 > Sinatra server for validating HTML exercises within [Mumuki](http://github.com/mumuki)
 
 ## Prerequisites
+
   Install `rbenv`:
 
 >You can install rbenv following the instructions of this [Link](http://uqbar-wiki.org/index.php?title=Gu%C3%ADa_de_Instalaci%C3%B3n_de_Ruby)
@@ -17,6 +19,7 @@
 >You can install docker following the instructions of this [Link](https://docs.docker.com/get-started/)
 
 ## Setup
+
  Open  the Terminal Console, located in this project's
  directory, run the following commands:
 
@@ -33,7 +36,7 @@ docker build -t mumuki/mumuki-html-worker .
 docker push mumuki/mumuki-html-worker
 ```
 
-## RUN TESTS
+## Run tests
 
 Note: When running tests you may recieve a Warning like this one:
 
@@ -60,3 +63,8 @@ If you have done the steps correctly both ways of running test should do it succ
 ## Considerations
 
 When using multiple files, it assumes that the main file will be called `index.html`.
+
+
+## See also
+
+Documentations for the dom assertions [is here](https://github.com/mumuki/run-dom-tests)
