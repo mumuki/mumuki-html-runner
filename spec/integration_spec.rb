@@ -465,4 +465,24 @@ html
                                                   {binding: 'css:p', inspection: 'DeclaresStyle:color', result: :passed},
                                                   {binding: 'css:p', inspection: 'DeclaresStyle:color:red', result: :failed}] }
   end
+
+  context 'when links has anchors content should be replaced' do
+    let(:test) { {
+      content: '<html><body><a href="#title"></a><div id="title></div></body></html>',
+      test: '',
+      expectations: [
+        {binding: 'a', inspection: 'DeclaresAttribute:href="#title"'}]} }
+
+    it { expect(response).to eq response_type: :unstructured,
+                                test_results: [],
+                                status: :passed,
+                                result: <<html,
+<div class="mu-browser" data-srcdoc="#{'<html><body><a href="about:srcdoc#title"></a><div id="title></div></body></html>'.escape_html}">
+</div>
+html
+                                feedback: '',
+                                expectation_results: [
+                                  {binding: 'a', inspection: 'DeclaresAttribute:href="#title"', result: :passed}] }
+  end
+
 end
