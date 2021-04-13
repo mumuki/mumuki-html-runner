@@ -88,9 +88,17 @@ html
   def build_iframe(content)
     dom = hexp(content).to_dom
     <<html
-<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{content.escape_html}">
+<div class="mu-browser"#{page_title dom}#{page_favicon dom} data-srcdoc="#{transform_content(content)}">
 </div>
 html
+  end
+
+  def transform_content(content)
+    replace_anchors(content).escape_html
+  end
+
+  def replace_anchors(content)
+    content.gsub(/href="#(\w*)"/, 'href="about:srcdoc#\1"')
   end
 
   def compile_content(request)
