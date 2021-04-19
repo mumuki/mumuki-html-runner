@@ -104,4 +104,37 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'}, result: true},
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
+  describe 'body DeclaresStyle: for screen 992' do
+    let(:code) { '<head> <style> @media screen (max-width: 992px) {body {color: red}}</style> </head>'}
+    let(:expectations) { [
+        {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}] }
+
+
+    it { expect(result).to eq [
+        { expectation: {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color'}, result: true},
+        { expectation: {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}, result: true},] }
+  end
+  describe 'body DeclaresStyle: media query and should respect the order' do
+    let(:code) { '<head> <style> @media screen (max-width: 992px) and (min-width: 180px) {body {color: red}}</style> </head>'}
+    let(:expectations) { [
+        {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:body', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}] }
+
+
+    it { expect(result).to eq [
+        { expectation: {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:body', inspection: 'DeclaresStyle:color'}, result: true},
+        { expectation: {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}, result: false},] }
+  end
+  describe 'not using correctyle media query tags fails' do
+    let(:code) { '<head> <style> @media screen (max-width: 992px) {body {color: red}}</style> </head>'}
+    let(:expectations) { [
+        {binding: 'css:screen (max-width: 992px):body', inspection: 'DeclaresStyle:color'},
+        {binding: 'css:screen (max-width: 992px):body', inspection: 'DeclaresStyle:color:red'}] }
+
+
+    it { expect(result).to eq [
+        { expectation: {binding: 'css:screen (max-width: 992px):body', inspection: 'DeclaresStyle:color'}, result: false},
+        { expectation: {binding: 'css:screen (max-width: 992px):body', inspection: 'DeclaresStyle:color:red'}, result: false},] }
+  end
 end
