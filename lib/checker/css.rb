@@ -1,6 +1,18 @@
 class CssParser::Parser
   def dig(*keys)
-    to_h['all'].dig(*keys.map(&:to_s)) rescue {}
+    media = parse_media(keys)
+    selectors = get_selectors(keys)
+    selectors.unshift(media)
+    to_h(media).dig(*selectors) rescue {}
+  end
+
+  def parse_media(keys)
+    media = keys.map {|k| k.get_string_between_markers('@media_start', '@media_end') }
+    media.first || 'all'
+  end
+
+  def get_selectors(keys)
+    selectors = keys.map {|k| k.remove_string_between_markers('@media_start', '@media_end:') || k }
   end
 end
 
@@ -12,6 +24,14 @@ class String
 
   def comma_separated_words
     split(',').map(&:strip)
+  end
+
+  def get_string_between_markers starter, ender
+    self[/#{Regexp.escape(starter)}(.*?)#{Regexp.escape(ender)}/m, 1]
+  end
+
+  def remove_string_between_markers starter, ender
+    gsub(/#{starter}.*#{ender}/, '')
   end
 end
 
@@ -54,6 +74,8 @@ module Checker
     end
 
     def self.values_match?(inspection_value, actual_value)
+      #puts "INSPECCION: #{inspection_value}\n"
+      #puts "VALOR: #{actual_value}\n"
       if inspection_value =~ COMMA_SEPARATED_INSPECTION_REGEX
         comma_separated_values_match? inspection_value, actual_value
       else
@@ -68,5 +90,6 @@ module Checker
     def self.comma_separated_values_match?(inspection_value, actual_value)
       inspection_value.comma_separated_words == actual_value.comma_separated_words
     end
+
   end
 end
