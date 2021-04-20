@@ -7,12 +7,12 @@ class CssParser::Parser
   end
 
   def parse_media(keys)
-    media = keys.map {|k| k.get_string_between_markers('@media_start', '@media_end') }
+    media = keys.map { |k| k.get_string_between_markers('@media_start', '@media_end') }
     media.first || 'all'
   end
 
   def get_selectors(keys)
-    keys.map {|k| k.remove_string_between_markers('@media_start', '@media_end:') || k }
+    keys.map { |k| k.remove_string_between_markers('@media_start', '@media_end:') }
   end
 end
 
