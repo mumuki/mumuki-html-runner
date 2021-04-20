@@ -26,11 +26,11 @@ class String
     split(',').map(&:strip)
   end
 
-  def get_string_between_markers starter, ender
+  def get_string_between_markers(starter, ender)
     self[/#{Regexp.escape(starter)}(.*?)#{Regexp.escape(ender)}/m, 1]
   end
 
-  def remove_string_between_markers starter, ender
+  def remove_string_between_markers(starter, ender)
     gsub(/#{starter}.*#{ender}/, '')
   end
 end
