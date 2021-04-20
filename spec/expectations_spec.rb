@@ -79,6 +79,7 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle'}, result: true},
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle'}, result: true} ] }
   end
+
   describe 'body DeclaresStyle:' do
     let(:code) { '<head> <style> p, h2 {color: blue; font-size: 4px;} div.cuadrado circulo {background: red} div.withBorder { border: 12px solid rgb(5, 5, 5); } div.withSpecificFont { font-family: "Lato", "Helvetica Neue", "Helvetica", "Arial", sans-serif; } div.withFontSize { font-size: 1.5em; }</style> </head>'}
     let(:expectations) { [
@@ -104,6 +105,7 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:div.cuadrado circulo', inspection: 'DeclaresStyle:background:red'}, result: true},
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
+
   describe 'body DeclaresStyle: for screen 992' do
     let(:code) { '<head> <style> @media screen (max-width: 992px) {body {color: red}}</style> </head>'}
     let(:expectations) { [
@@ -115,6 +117,7 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color'}, result: true},
         { expectation: {binding: 'css:@media_startscreen (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}, result: true},] }
   end
+
   describe 'body DeclaresStyle: media query and should respect the order' do
     let(:code) { '<head> <style> @media screen (max-width: 992px) and (min-width: 180px) {body {color: red}}</style> </head>'}
     let(:expectations) { [
@@ -126,7 +129,8 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:body', inspection: 'DeclaresStyle:color'}, result: true},
         { expectation: {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}, result: false},] }
   end
-  describe 'not using correctyle media query tags fails' do
+
+  describe 'not using correctly media query tags fails' do
     let(:code) { '<head> <style> @media screen (max-width: 992px) {body {color: red}}</style> </head>'}
     let(:expectations) { [
         {binding: 'css:screen (max-width: 992px):body', inspection: 'DeclaresStyle:color'},
