@@ -74,8 +74,6 @@ module Checker
     end
 
     def self.values_match?(inspection_value, actual_value)
-      #puts "INSPECCION: #{inspection_value}\n"
-      #puts "VALOR: #{actual_value}\n"
       if inspection_value =~ COMMA_SEPARATED_INSPECTION_REGEX
         comma_separated_values_match? inspection_value, actual_value
       else
