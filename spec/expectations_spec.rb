@@ -131,7 +131,7 @@ describe HtmlExpectationsHook do
   end
 
   describe 'body DeclaresStyle: media query works with multiline code' do
-    let(:code) { '<head>\n  <style> \n    @media screen (max-width: 992px) and (min-width: 180px) {\n      body {\n        color: red\n      }\n    }\n  </style>\n</head>'}
+    let(:code) { "<head>\n  <style> \n    @media screen (max-width: 992px) and (min-width: 180px) {\n      body {\n        color: red\n      }\n    }\n  </style>\n</head>" }
     let(:expectations) { [
       {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:body', inspection: 'DeclaresStyle:color'},
       {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}] }
