@@ -130,6 +130,18 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:body', inspection: 'DeclaresStyle:color:red'}, result: false},] }
   end
 
+  describe '* DeclaresStyle: media query and should respect the order' do
+    let(:code) { '<head> <style> @media screen (max-width: 992px) and (min-width: 180px) {* {color: red}}</style> </head>'}
+    let(:expectations) { [
+      {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:*', inspection: 'DeclaresStyle:color'},
+      {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:*', inspection: 'DeclaresStyle:color:red'}] }
+
+
+    it { expect(result).to eq [
+                                { expectation: {binding: 'css:@media_startscreen (max-width: 992px) and (min-width: 180px)@media_end:*', inspection: 'DeclaresStyle:color'}, result: true},
+                                { expectation: {binding: 'css:@media_startscreen (min-width: 180px) and (max-width: 992px)@media_end:*', inspection: 'DeclaresStyle:color:red'}, result: false},] }
+  end
+
   describe 'body DeclaresStyle: media query works with multiline code' do
     let(:code) { "<head>\n  <style> \n    @media screen (max-width: 992px) and (min-width: 180px) {\n      body {\n        color: red\n      }\n    }\n  </style>\n</head>" }
     let(:expectations) { [
