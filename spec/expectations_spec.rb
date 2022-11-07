@@ -106,6 +106,16 @@ describe HtmlExpectationsHook do
         { expectation: {binding: 'css:h2', inspection: 'DeclaresStyle:color:blue'}, result: true}] }
   end
 
+  describe 'case insensitive body DeclaresStyle: ' do
+    let(:code) { '<head> <style> p { color: rgb(5,5,5) } </style> </head>'}
+    let(:expectations) { [
+        {binding: 'css:p', inspection: 'DeclaresStyle:color:rgb(5, 5, 5)'}] }
+
+
+    it { expect(result).to eq [
+        { expectation: {binding: 'css:p', inspection: 'DeclaresStyle:color:rgb(5, 5, 5)'}, result: true}] }
+  end
+
   describe 'body DeclaresStyle: for screen 992' do
     let(:code) { '<head> <style> @media screen (max-width: 992px) {body {color: red}}</style> </head>'}
     let(:expectations) { [
