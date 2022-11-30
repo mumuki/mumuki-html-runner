@@ -19,7 +19,15 @@ end
 class String
   # Avoids properties like rgb(5, 10, 15) to be split
   def css_values
-    scan /[^\s]+\(\s*\g<0>\s*(?:,\s*\g<0>)*\)|[^\s]+/
+    scan(/[^\s]+\(\s*\g<0>\s*(?:,\s*\g<0>)*\)|[^\s]+/).map(&:normalize_rgb_css_value)
+  end
+
+  def normalize_rgb_css_value
+    if starts_with?("rgb(")
+      gsub(" ", "")
+    else
+      self
+    end
   end
 
   def comma_separated_words
@@ -77,7 +85,7 @@ module Checker
       if inspection_value =~ COMMA_SEPARATED_INSPECTION_REGEX
         comma_separated_values_match? inspection_value, actual_value
       else
-        actual_value.css_values.include? inspection_value
+        actual_value.css_values.include? inspection_value.normalize_rgb_css_value
       end
     end
 
