@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mumukit', '~> 2.38'
   spec.add_dependency 'mumukit-inspection', '~> 6.0'
   spec.add_dependency 'hexp', '~> 0.4'
-  spec.add_dependency 'css_parser', '~> 1.6'
+  spec.add_dependency 'css_parser', '~> 1.6', '< 1.14'
 
   spec.add_development_dependency 'bundler', '>= 1.7', '< 3'
   spec.add_development_dependency 'rake', '~> 10.0'
